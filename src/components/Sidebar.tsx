@@ -19,12 +19,15 @@ import Stack from '@mui/joy/Stack';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
-import ShoppingCartRoundedIcon from '@mui/icons-material/ShoppingCartRounded';
+import ReceiptRoundedIcon from '@mui/icons-material/ReceiptRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import QuestionAnswerRoundedIcon from '@mui/icons-material/QuestionAnswerRounded';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import SupportRoundedIcon from '@mui/icons-material/SupportRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
+import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import HomeWorkRoundedIcon from '@mui/icons-material/HomeWorkRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import BrightnessAutoRoundedIcon from '@mui/icons-material/BrightnessAutoRounded';
@@ -150,15 +153,6 @@ export default function Sidebar() {
         >
           <ListItem>
             <ListItemButton>
-              <HomeRoundedIcon />
-              <ListItemContent>
-                <Typography level="title-sm">Home</Typography>
-              </ListItemContent>
-            </ListItemButton>
-          </ListItem>
-
-          <ListItem>
-            <ListItemButton>
               <DashboardRoundedIcon />
               <ListItemContent>
                 <Typography level="title-sm">Dashboard</Typography>
@@ -168,9 +162,9 @@ export default function Sidebar() {
 
           <ListItem>
             <ListItemButton selected>
-              <ShoppingCartRoundedIcon />
+              <ReceiptRoundedIcon />
               <ListItemContent>
-                <Typography level="title-sm">Orders</Typography>
+                <Typography level="title-sm">Ratificação</Typography>
               </ListItemContent>
             </ListItemButton>
           </ListItem>
@@ -179,9 +173,9 @@ export default function Sidebar() {
             <Toggler
               renderToggle={({ open, setOpen }) => (
                 <ListItemButton onClick={() => setOpen(!open)}>
-                  <AssignmentRoundedIcon />
+                  <FolderRoundedIcon />
                   <ListItemContent>
-                    <Typography level="title-sm">Tasks</Typography>
+                    <Typography level="title-sm">Cadastros</Typography>
                   </ListItemContent>
                   <KeyboardArrowDownIcon
                     sx={[
@@ -199,42 +193,32 @@ export default function Sidebar() {
             >
               <List sx={{ gap: 0.5 }}>
                 <ListItem sx={{ mt: 0.5 }}>
-                  <ListItemButton>All tasks</ListItemButton>
+                  <ListItemButton>
+                    <PersonRoundedIcon />
+                    <ListItemContent>
+                      <Typography level="title-sm">Clientes</Typography>
+                    </ListItemContent>
+                  </ListItemButton>
                 </ListItem>
                 <ListItem>
-                  <ListItemButton>Backlog</ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>In progress</ListItemButton>
-                </ListItem>
-                <ListItem>
-                  <ListItemButton>Done</ListItemButton>
+                  <ListItemButton>
+                    <HomeWorkRoundedIcon />
+                    <ListItemContent>
+                      <Typography level="title-sm">Propriedades</Typography>
+                    </ListItemContent>
+                  </ListItemButton>
                 </ListItem>
               </List>
             </Toggler>
           </ListItem>
-          <ListItem>
-            <ListItemButton
-              role="menuitem"
-              component="a"
-              href="/joy-ui/getting-started/templates/messages/"
-            >
-              <QuestionAnswerRoundedIcon />
-              <ListItemContent>
-                <Typography level="title-sm">Messages</Typography>
-              </ListItemContent>
-              <Chip size="sm" color="primary" variant="solid">
-                4
-              </Chip>
-            </ListItemButton>
-          </ListItem>
+          
           <ListItem nested>
             <Toggler
               renderToggle={({ open, setOpen }) => (
                 <ListItemButton onClick={() => setOpen(!open)}>
                   <GroupRoundedIcon />
                   <ListItemContent>
-                    <Typography level="title-sm">Users</Typography>
+                    <Typography level="title-sm">Usuários</Typography>
                   </ListItemContent>
                   <KeyboardArrowDownIcon
                     sx={[
@@ -257,14 +241,14 @@ export default function Sidebar() {
                     component="a"
                     href="/joy-ui/getting-started/templates/profile-dashboard/"
                   >
-                    My profile
+                    Meu perfil
                   </ListItemButton>
                 </ListItem>
                 <ListItem>
-                  <ListItemButton>Create a new user</ListItemButton>
+                  <ListItemButton>Criar novo usuário</ListItemButton>
                 </ListItem>
                 <ListItem>
-                  <ListItemButton>Roles & permission</ListItemButton>
+                  <ListItemButton>Funções e permissões</ListItemButton>
                 </ListItem>
               </List>
             </Toggler>
@@ -283,13 +267,13 @@ export default function Sidebar() {
           <ListItem>
             <ListItemButton>
               <SupportRoundedIcon />
-              Support
+              Suporte
             </ListItemButton>
           </ListItem>
           <ListItem>
             <ListItemButton>
               <SettingsRoundedIcon />
-              Settings
+              Configurações
             </ListItemButton>
           </ListItem>
         </List>
