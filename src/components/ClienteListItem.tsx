@@ -24,13 +24,21 @@ import { toggleSidebar } from '../utils';
 
 type ClienteListItemProps = {
   cliente: Cliente;
-  selectedClienteId?: string;
-  setSelectedCliente: (cliente: Cliente) => void;
+  isSelected?: boolean;
+  onClick: () => void;
+  onEdit?: () => void;
+  onDelete?: () => void;
+  onView?: () => void;
 };
 
-export default function ClienteListItem(props: ClienteListItemProps) {
-  const { cliente, selectedClienteId, setSelectedCliente } = props;
-  const selected = selectedClienteId === cliente.id;
+export default function ClienteListItem({
+  cliente,
+  isSelected = false,
+  onClick,
+  onEdit,
+  onDelete,
+  onView
+}: ClienteListItemProps) {
   const isPF = cliente.tipoCliente === 'PF';
   const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null);
   const menuOpen = Boolean(menuAnchorEl);
@@ -46,20 +54,27 @@ export default function ClienteListItem(props: ClienteListItemProps) {
 
   const handleViewClick = (event: React.MouseEvent) => {
     event.stopPropagation();
-    setSelectedCliente(cliente);
+    if (onView) {
+      onView();
+    } else {
+      onClick(); // Default to onClick if onView not provided
+    }
     handleMenuClose();
   };
 
   const handleEditClick = (event: React.MouseEvent) => {
     event.stopPropagation();
-    setSelectedCliente(cliente);
+    if (onEdit) {
+      onEdit();
+    }
     handleMenuClose();
-    // Additional edit logic can be added here
   };
 
   const handleDeleteClick = (event: React.MouseEvent) => {
     event.stopPropagation();
-    // Delete logic would go here
+    if (onDelete) {
+      onDelete();
+    }
     handleMenuClose();
   };
 
@@ -69,9 +84,9 @@ export default function ClienteListItem(props: ClienteListItemProps) {
         <ListItemButton
           onClick={() => {
             toggleSidebar();
-            setSelectedCliente(cliente);
+            onClick();
           }}
-          selected={selected}
+          selected={isSelected}
           color="neutral"
           sx={{ flexDirection: 'column', alignItems: 'initial', gap: 1, position: 'relative' }}
         >
@@ -118,7 +133,7 @@ export default function ClienteListItem(props: ClienteListItemProps) {
             </Box>
             
             <Typography level="body-sm" sx={{ color: 'text.secondary' }}>
-              {cliente.documento}
+              {isPF ? cliente.cpf : cliente.cnpj}
             </Typography>
             
             <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>

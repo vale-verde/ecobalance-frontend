@@ -14,42 +14,51 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ClienteListItem from './ClienteListItem';
 import { Cliente } from '../data/clientes';
 import { toggleSidebar } from '../utils';
+import CircularProgress from '@mui/joy/CircularProgress';
 
 type ClientesListPaneProps = {
   clientes: Cliente[];
-  setSelectedCliente: (cliente: Cliente) => void;
-  selectedClienteId: string;
+  loading?: boolean;
+  selectedClienteId: string | null;
+  onClienteSelect: (id: string) => void;
+  onAddClienteClick: () => void;
+  onSearch: (searchTerm: string) => void;
 };
 
-export default function ClientesListPane(props: ClientesListPaneProps) {
-  const { clientes, setSelectedCliente, selectedClienteId } = props;
+export default function ClientesListPane({
+  clientes,
+  loading = false,
+  selectedClienteId,
+  onClienteSelect,
+  onAddClienteClick,
+  onSearch
+}: ClientesListPaneProps) {
   const [searchValue, setSearchValue] = React.useState('');
-  const [filteredClientes, setFilteredClientes] = React.useState(clientes);
   const [page, setPage] = React.useState(1);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  const totalPages = Math.max(1, Math.ceil(filteredClientes.length / rowsPerPage));
+  // Calcular total de páginas e itens a exibir
+  const totalPages = Math.max(1, Math.ceil(clientes.length / rowsPerPage));
   const startIndex = (page - 1) * rowsPerPage;
-  const endIndex = Math.min(startIndex + rowsPerPage, filteredClientes.length);
-  const displayedClientes = filteredClientes.slice(startIndex, endIndex);
+  const endIndex = Math.min(startIndex + rowsPerPage, clientes.length);
+  const displayedClientes = clientes.slice(startIndex, endIndex);
 
-  React.useEffect(() => {
-    if (searchValue.trim() === '') {
-      setFilteredClientes(clientes);
-    } else {
-      const filtered = clientes.filter(
-        cliente => cliente.nome.toLowerCase().includes(searchValue.toLowerCase()) ||
-                  cliente.documento.toLowerCase().includes(searchValue.toLowerCase())
-      );
-      setFilteredClientes(filtered);
-    }
-    setPage(1); // Reset to first page when filtering
-  }, [searchValue, clientes]);
-
+  // Função para mudar de página
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
-
+  
+  // Função para pesquisar
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSearch(searchValue);
+  };
+  
+  // Resetar para página 1 quando a lista de clientes mudar
+  React.useEffect(() => {
+    setPage(1);
+  }, [clientes.length]);
+  
   return (
     <Sheet
       sx={{
@@ -75,7 +84,7 @@ export default function ClientesListPane(props: ClientesListPaneProps) {
               size="md"
               slotProps={{ root: { component: 'span' } }}
             >
-              {filteredClientes.length}
+              {clientes.length}
             </Chip>
           }
           sx={{ fontSize: { xs: 'md', md: 'lg' }, fontWeight: 'lg', mr: 'auto' }}
@@ -90,18 +99,6 @@ export default function ClientesListPane(props: ClientesListPaneProps) {
           sx={{ display: { xs: 'none', sm: 'unset' } }}
         >
           <FilterAltIcon />
-        </IconButton>
-        <IconButton
-          variant="plain"
-          aria-label="close"
-          color="neutral"
-          size="sm"
-          onClick={() => {
-            toggleSidebar();
-          }}
-          sx={{ display: { sm: 'none' } }}
-        >
-          <CloseRoundedIcon />
         </IconButton>
       </Stack>
       <Box sx={{ px: 2, pb: 1.5, display: 'flex', gap: 1 }}>
@@ -118,6 +115,7 @@ export default function ClientesListPane(props: ClientesListPaneProps) {
           color="primary"
           aria-label="add client"
           variant="outlined"
+          onClick={onAddClienteClick}
           sx={{
             height: '36px',
             width: '36px',
@@ -130,42 +128,48 @@ export default function ClientesListPane(props: ClientesListPaneProps) {
         </IconButton>
       </Box>
       <Box sx={{ 
-        flex: 1,
-        overflowY: 'auto',
-        display: 'flex',
-        flexDirection: 'column',
+          flex: 1,
+          overflowY: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
       }}>
-        <List
-          sx={{
-            py: 0,
-            '--ListItem-paddingY': '0.75rem',
-            '--ListItem-paddingX': '1rem',
-          }}
-        >
-          {displayedClientes.length > 0 ? (
-            displayedClientes.map((cliente) => (
-              <ClienteListItem
-                key={cliente.id}
-                cliente={cliente}
-                setSelectedCliente={setSelectedCliente}
-                selectedClienteId={selectedClienteId}
-              />
-            ))
-          ) : (
-            <Box sx={{ p: 2, textAlign: 'center' }}>
-              <Typography level="body-sm">Nenhum cliente encontrado</Typography>
-            </Box>
-          )}
-        </List>
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <List
+            sx={{
+              py: 0,
+              '--ListItem-paddingY': '0.75rem',
+              '--ListItem-paddingX': '1rem',
+            }}
+          >
+            {displayedClientes.length > 0 ? (
+              displayedClientes.map((cliente) => (
+                <ClienteListItem
+                  key={cliente.id}
+                  cliente={cliente}
+                  isSelected={cliente.id === selectedClienteId}
+                  onClick={() => onClienteSelect(cliente.id)}
+                />
+              ))
+            ) : (
+              <Box sx={{ p: 2, textAlign: 'center' }}>
+                <Typography level="body-sm">Nenhum cliente encontrado</Typography>
+              </Box>
+            )}
+          </List>
+        )}
       </Box>
       
       {/* Fixed Pagination Footer */}
       <Box sx={{ 
         p: 2, 
-        display: 'flex', 
+        display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderTop: '1px solid', 
+        borderTop: '1px solid',
         borderColor: 'divider',
         backgroundColor: 'background.surface'
       }}>
@@ -185,7 +189,7 @@ export default function ClientesListPane(props: ClientesListPaneProps) {
           </Select>
           
           <IconButton 
-            size="sm" 
+            size="sm"
             disabled={page <= 1} 
             onClick={() => handlePageChange(page - 1)}
             variant="outlined"
