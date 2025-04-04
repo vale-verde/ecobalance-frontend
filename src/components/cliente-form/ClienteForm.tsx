@@ -1057,8 +1057,8 @@ export default function ClienteForm({
           bottom: 0,
           zIndex: 10,
           py: 1.5,
-          mx: -3, // Estende além do padding do container pai
-          px: 3, // Mantém o padding interno consistente
+          mx: -3, 
+          px: 3, 
           display: 'flex', 
           justifyContent: 'flex-end', 
           gap: 2,
