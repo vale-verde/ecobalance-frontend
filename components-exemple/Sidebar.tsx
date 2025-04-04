@@ -33,7 +33,11 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import ColorSchemeToggle from './ColorSchemeToggle';
 import { closeSidebar } from '../utils';
 
-function Toggler(props: {
+function Toggler({
+  defaultExpanded = false,
+  renderToggle,
+  children,
+}: {
   defaultExpanded?: boolean;
   children: React.ReactNode;
   renderToggle: (params: {
@@ -41,7 +45,6 @@ function Toggler(props: {
     setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   }) => React.ReactNode;
 }) {
-  const { defaultExpanded = false, renderToggle, children } = props;
   const [open, setOpen] = React.useState(defaultExpanded);
   return (
     <React.Fragment>
@@ -153,6 +156,7 @@ export default function Sidebar() {
               </ListItemContent>
             </ListItemButton>
           </ListItem>
+
           <ListItem>
             <ListItemButton>
               <DashboardRoundedIcon />
@@ -161,6 +165,7 @@ export default function Sidebar() {
               </ListItemContent>
             </ListItemButton>
           </ListItem>
+
           <ListItem>
             <ListItemButton
               role="menuitem"
@@ -183,13 +188,7 @@ export default function Sidebar() {
                   </ListItemContent>
                   <KeyboardArrowDownIcon
                     sx={[
-                      open
-                        ? {
-                            transform: 'rotate(180deg)',
-                          }
-                        : {
-                            transform: 'none',
-                          },
+                      open ? { transform: 'rotate(180deg)' } : { transform: 'none' },
                     ]}
                   />
                 </ListItemButton>
@@ -212,7 +211,11 @@ export default function Sidebar() {
             </Toggler>
           </ListItem>
           <ListItem>
-            <ListItemButton selected>
+            <ListItemButton
+              role="menuitem"
+              component="a"
+              href="/joy-ui/getting-started/templates/messages/"
+            >
               <QuestionAnswerRoundedIcon />
               <ListItemContent>
                 <Typography level="title-sm">Messages</Typography>
@@ -224,6 +227,7 @@ export default function Sidebar() {
           </ListItem>
           <ListItem nested>
             <Toggler
+              defaultExpanded
               renderToggle={({ open, setOpen }) => (
                 <ListItemButton onClick={() => setOpen(!open)}>
                   <GroupRoundedIcon />
@@ -232,13 +236,7 @@ export default function Sidebar() {
                   </ListItemContent>
                   <KeyboardArrowDownIcon
                     sx={[
-                      open
-                        ? {
-                            transform: 'rotate(180deg)',
-                          }
-                        : {
-                            transform: 'none',
-                          },
+                      open ? { transform: 'rotate(180deg)' } : { transform: 'none' },
                     ]}
                   />
                 </ListItemButton>
@@ -246,13 +244,7 @@ export default function Sidebar() {
             >
               <List sx={{ gap: 0.5 }}>
                 <ListItem sx={{ mt: 0.5 }}>
-                  <ListItemButton
-                    role="menuitem"
-                    component="a"
-                    href="/joy-ui/getting-started/templates/profile-dashboard/"
-                  >
-                    My profile
-                  </ListItemButton>
+                  <ListItemButton selected>My profile</ListItemButton>
                 </ListItem>
                 <ListItem>
                   <ListItemButton>Create a new user</ListItemButton>

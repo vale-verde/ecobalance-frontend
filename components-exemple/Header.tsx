@@ -9,14 +9,14 @@ export default function Header() {
   return (
     <Sheet
       sx={{
-        display: { sm: 'flex', md: 'none' },
+        display: { xs: 'flex', md: 'none' },
         alignItems: 'center',
         justifyContent: 'space-between',
         position: 'fixed',
         top: 0,
         width: '100vw',
         height: 'var(--Header-height)',
-        zIndex: 9995,
+        zIndex: 9998,
         p: 2,
         gap: 1,
         borderBottom: '1px solid',
@@ -28,7 +28,7 @@ export default function Header() {
         styles={(theme) => ({
           ':root': {
             '--Header-height': '52px',
-            [theme.breakpoints.up('lg')]: {
+            [theme.breakpoints.up('md')]: {
               '--Header-height': '0px',
             },
           },
