@@ -16,6 +16,7 @@ import OrderTable from './components/OrderTable';
 import OrderList from './components/OrderList';
 import Header from './components/Header';
 import ClientesPage from './pages/ClientesPage';
+import PropriedadesPage from './pages/PropriedadesPage';
 
 /**
  * Componente principal da aplicação Ecobalance
@@ -36,6 +37,8 @@ export default function JoyOrderDashboardTemplate() {
     switch (currentPage) {
       case 'clientes':
         return <ClientesPage />;
+      case 'propriedades':
+        return <PropriedadesPage />;
       case 'dashboard':
       default:
         return (
