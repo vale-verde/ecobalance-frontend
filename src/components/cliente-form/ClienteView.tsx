@@ -10,6 +10,7 @@ import ListItemContent from '@mui/joy/ListItemContent';
 import Sheet from '@mui/joy/Sheet';
 import Stack from '@mui/joy/Stack';
 import Typography from '@mui/joy/Typography';
+import Button from '@mui/joy/Button';
 import PersonIcon from '@mui/icons-material/Person';
 import BusinessIcon from '@mui/icons-material/Business';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -24,11 +25,22 @@ import AttachmentIcon from '@mui/icons-material/Attachment';
 import ImageIcon from '@mui/icons-material/Image';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import EditIcon from '@mui/icons-material/Edit';
+import CancelIcon from '@mui/icons-material/Cancel';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
+import HomeIcon from '@mui/icons-material/Home';
+import PlaceIcon from '@mui/icons-material/Place';
+import LocationCityIcon from '@mui/icons-material/LocationCity';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import { Cliente, Documento, Socio } from '../../data/clientes';
 
 type ClienteViewProps = {
   cliente: Cliente;
   onEditClick: () => void;
+  onCancelClick?: () => void;
 };
 
 type InfoItemProps = {
@@ -41,12 +53,53 @@ function InfoItem({ label, value, icon }: InfoItemProps) {
   if (!value) return null;
   
   return (
-    <Box sx={{ mb: 2 }}>
-      <Typography level="body-xs" sx={{ display: 'flex', alignItems: 'center', mb: 0.5, color: 'text.secondary' }}>
-        {icon && <Box component="span" sx={{ mr: 1, display: 'flex' }}>{icon}</Box>}
+    <Box sx={{ 
+      mb: { xs: 2, md: 0 },
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: 64,
+    }}>
+      <Typography 
+        level="body-xs" 
+        sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          mb: 0.5, 
+          color: 'text.secondary',
+          fontWeight: 'medium',
+          height: 24,
+          lineHeight: '24px'
+        }}
+      >
+        {icon && 
+          <Box 
+            component="span" 
+            sx={{ 
+              mr: 1, 
+              display: 'flex', 
+              color: 'primary.500', 
+              width: 20,
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            {icon}
+          </Box>
+        }
         {label}
       </Typography>
-      <Typography level="body-md">{value}</Typography>
+      <Typography 
+        level="body-md" 
+        sx={{ 
+          fontWeight: 'normal',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          lineHeight: 1.5
+        }}
+      >
+        {value || "-"}
+      </Typography>
     </Box>
   );
 }
@@ -65,11 +118,20 @@ function DocumentoItem({ documento }: DocumentoItemProps) {
   }
   
   return (
-    <Card variant="outlined" sx={{ mb: 1, p: 1 }}>
+    <Card variant="outlined" sx={{ 
+      mb: 1, 
+      p: 1.5,
+      height: '100%',
+      transition: 'all 0.2s',
+      '&:hover': {
+        boxShadow: 'sm',
+        borderColor: 'neutral.outlinedHoverBorder'
+      } 
+    }}>
       <Stack direction="row" spacing={2} alignItems="center">
-        <Box sx={{ color: 'primary.500' }}>{icon}</Box>
+        <Box sx={{ color: 'primary.500', fontSize: '1.25rem' }}>{icon}</Box>
         <Box sx={{ flex: 1 }}>
-          <Typography level="body-sm">{documento.nome}</Typography>
+          <Typography level="body-sm" sx={{ fontWeight: 'medium' }}>{documento.nome}</Typography>
           <Typography level="body-xs" sx={{ color: 'text.tertiary' }}>
             Adicionado em {documento.dataUpload}
           </Typography>
@@ -79,97 +141,272 @@ function DocumentoItem({ documento }: DocumentoItemProps) {
   );
 }
 
-export default function ClienteView({ cliente, onEditClick }: ClienteViewProps) {
+export default function ClienteView({ cliente, onEditClick, onCancelClick }: ClienteViewProps) {
   const isPF = cliente.tipoCliente === 'PF';
   
   return (
-    <Stack spacing={4}>
-      {/* Cabeçalho */}
-      <Box>
+    <Box sx={{ 
+      height: '100%', 
+      display: 'flex', 
+      flexDirection: 'column',
+      position: 'relative'
+    }}>
+      {/* Cabeçalho do Formulário */}
+      <Box 
+        sx={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between', 
+          mb: 3, 
+          pt: 1,
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          pb: 2
+        }}
+      >
         <Stack direction="row" spacing={2} alignItems="center">
-          <Chip
-            variant="soft"
-            color={isPF ? 'success' : 'primary'}
-            startDecorator={isPF ? <PersonIcon /> : <BusinessIcon />}
-          >
-            {isPF ? 'Pessoa Física' : 'Pessoa Jurídica'}
-          </Chip>
-          <Typography level="body-sm" sx={{ color: 'text.tertiary' }}>
-            Cadastrado em {cliente.timestamp}
-          </Typography>
+          <Box sx={{ 
+            color: 'primary.500', 
+            fontSize: '1.5rem',
+            bgcolor: 'primary.softBg',
+            borderRadius: 'md',
+            width: 40,
+            height: 40,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <VisibilityIcon sx={{ fontSize: 'inherit' }} />
+          </Box>
+          <Box>
+            <Typography level="h4">
+              Detalhes do Cliente
+            </Typography>
+            <Typography level="body-sm" color="neutral">
+              Visualização completa dos dados do cliente
+            </Typography>
+          </Box>
         </Stack>
+        
+        <Chip
+          variant="soft"
+          color="neutral"
+          startDecorator={isPF ? <PersonIcon /> : <BusinessIcon />}
+          sx={{ 
+            bgcolor: isPF ? 'success.softBg' : 'primary.softBg',
+            fontWeight: 'medium'
+          }}
+        >
+          {isPF ? 'Pessoa Física' : 'Pessoa Jurídica'}
+        </Chip>
       </Box>
       
-      <Grid container spacing={3}>
-        {/* Dados Principais */}
-        <Grid xs={12} md={6}>
+      <Box sx={{ 
+        flex: 1, 
+        display: 'flex', 
+        flexDirection: 'column',
+        width: '100%',
+        overflow: 'auto',
+        paddingRight: '8px',
+        scrollbarWidth: 'thin',
+        '&::-webkit-scrollbar': {
+          width: '8px',
+          backgroundColor: 'transparent',
+        },
+        '&::-webkit-scrollbar-thumb': {
+          backgroundColor: 'rgba(0,0,0,0.1)',
+          borderRadius: '4px',
+        },
+      }}>
+        <Stack spacing={3} sx={{ width: '100%' }}>
+          {/* Dados Pessoais / Empresariais */}
           <Sheet 
             variant="outlined" 
             sx={{ 
               borderRadius: 'md', 
               p: 3,
-              mb: 3,
+              width: '100%',
+              boxShadow: 'none',
+              backgroundColor: 'background.surface',
             }}
           >
-            <Typography level="title-md" sx={{ mb: 2 }}>
+            <Typography 
+              level="title-md" 
+              sx={{ 
+                mb: 2, 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: 1,
+                color: 'primary.600',
+                '& svg': { color: 'primary.500' }
+              }}
+            >
+              {isPF ? <PersonIcon /> : <BusinessIcon />}
               {isPF ? 'Dados Pessoais' : 'Dados da Empresa'}
             </Typography>
             
             {isPF ? (
               /* Pessoa Física */
-              <Box>
-                <InfoItem 
-                  label="Nome Completo" 
-                  value={cliente.nome}
-                  icon={<PersonIcon fontSize="small" />}
-                />
-                <InfoItem 
-                  label="CPF" 
-                  value={cliente.cpf}
-                  icon={<FingerprintIcon fontSize="small" />}
-                />
-                <InfoItem 
-                  label="RG" 
-                  value={cliente.rg}
-                  icon={<BadgeIcon fontSize="small" />}
-                />
-                <InfoItem 
-                  label="Data de Nascimento" 
-                  value={cliente.dataNascimento}
-                  icon={<CakeIcon fontSize="small" />}
-                />
-                <InfoItem 
-                  label="Nacionalidade" 
-                  value={cliente.nacionalidade}
-                  icon={<PublicIcon fontSize="small" />}
-                />
-                <InfoItem 
-                  label="Estado Civil" 
-                  value={cliente.estadoCivil}
-                  icon={<FamilyRestroomIcon fontSize="small" />}
-                />
-              </Box>
+              <Grid container spacing={2} sx={{ mt: 0 }}>
+                {/* Primeira coluna */}
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Nome Completo" 
+                    value={cliente.nome}
+                    icon={<AccountCircleIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="CPF" 
+                    value={cliente.cpf}
+                    icon={<FingerprintIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="RG" 
+                    value={cliente.rg}
+                    icon={<BadgeIcon fontSize="small" />}
+                  />
+                </Grid>
+                
+                {/* Segunda linha */}
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Data de Nascimento" 
+                    value={cliente.dataNascimento}
+                    icon={<CakeIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Nacionalidade" 
+                    value={cliente.nacionalidade}
+                    icon={<PublicIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Estado Civil" 
+                    value={cliente.estadoCivil}
+                    icon={<FamilyRestroomIcon fontSize="small" />}
+                  />
+                </Grid>
+              </Grid>
             ) : (
               /* Pessoa Jurídica */
-              <Box>
-                <InfoItem 
-                  label="Razão Social" 
-                  value={cliente.razaoSocial}
-                  icon={<BusinessIcon fontSize="small" />}
-                />
-                <InfoItem 
-                  label="CNPJ" 
-                  value={cliente.cnpj}
-                  icon={<FingerprintIcon fontSize="small" />}
-                />
-                <InfoItem 
-                  label="Número Mínimo de Assinaturas" 
-                  value={cliente.numeroMinimoAssinaturas}
-                  icon={<SupervisorAccountIcon fontSize="small" />}
-                />
-              </Box>
+              <Grid container spacing={2} sx={{ mt: 0 }}>
+                {/* Primeira coluna */}
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Razão Social" 
+                    value={cliente.razaoSocial}
+                    icon={<BusinessIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Nome Fantasia"
+                    value={cliente.nome}
+                    icon={<BusinessIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="CNPJ" 
+                    value={cliente.cnpj}
+                    icon={<FingerprintIcon fontSize="small" />}
+                  />
+                </Grid>
+                
+                {/* Segunda linha */}
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Número Mínimo de Assinaturas" 
+                    value={cliente.numeroMinimoAssinaturas}
+                    icon={<SupervisorAccountIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={8}>
+                  {/* Espaço reservado para futuros campos */}
+                </Grid>
+              </Grid>
             )}
           </Sheet>
+          
+          {/* Cônjuge (PF) */}
+          {isPF && cliente.conjuge && cliente.estadoCivil === "Casado" && (
+            <Sheet 
+              variant="outlined" 
+              sx={{ 
+                borderRadius: 'md', 
+                p: 3,
+                width: '100%',
+                boxShadow: 'none',
+                backgroundColor: 'background.surface',
+              }}
+            >
+              <Typography 
+                level="title-md" 
+                sx={{ 
+                  mb: 2, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 1,
+                  color: 'primary.600',
+                  '& svg': { color: 'primary.500' }
+                }}
+              >
+                <FamilyRestroomIcon />
+                Dados do Cônjuge
+              </Typography>
+              
+              <Grid container spacing={2} sx={{ mt: 0 }}>
+                {/* Primeira coluna */}
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Nome" 
+                    value={cliente.conjuge.nome}
+                    icon={<PermContactCalendarIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="CPF" 
+                    value={cliente.conjuge.cpf}
+                    icon={<FingerprintIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="RG" 
+                    value={cliente.conjuge.rg}
+                    icon={<BadgeIcon fontSize="small" />}
+                  />
+                </Grid>
+                
+                {/* Segunda linha */}
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Data de Nascimento" 
+                    value={cliente.conjuge.dataNascimento}
+                    icon={<CakeIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Nacionalidade" 
+                    value={cliente.conjuge.nacionalidade}
+                    icon={<PublicIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={4}>
+                  {/* Espaço reservado para futuros campos */}
+                </Grid>
+              </Grid>
+            </Sheet>
+          )}
           
           {/* Endereço */}
           {cliente.endereco && (
@@ -178,19 +415,73 @@ export default function ClienteView({ cliente, onEditClick }: ClienteViewProps) 
               sx={{ 
                 borderRadius: 'md', 
                 p: 3,
-                mb: 3,
+                width: '100%',
+                boxShadow: 'none',
+                backgroundColor: 'background.surface',
               }}
             >
-              <Typography level="title-md" startDecorator={<LocationOnIcon />} sx={{ mb: 2 }}>
+              <Typography 
+                level="title-md" 
+                sx={{ 
+                  mb: 2, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 1,
+                  color: 'primary.600',
+                  '& svg': { color: 'primary.500' }
+                }}
+              >
+                <LocationOnIcon />
                 Endereço
               </Typography>
               
-              <InfoItem label="CEP" value={cliente.endereco.cep} />
-              <InfoItem label="Estado" value={cliente.endereco.estado} />
-              <InfoItem label="Cidade" value={cliente.endereco.cidade} />
-              <InfoItem label="Bairro" value={cliente.endereco.bairro} />
-              <InfoItem label="Logradouro" value={cliente.endereco.logradouro} />
-              <InfoItem label="Complemento" value={cliente.endereco.complemento} />
+              <Grid container spacing={2} sx={{ mt: 0 }}>
+                {/* Primeira linha */}
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="CEP" 
+                    value={cliente.endereco.cep}
+                    icon={<MarkunreadMailboxIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Bairro" 
+                    value={cliente.endereco.bairro}
+                    icon={<PlaceIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Estado" 
+                    value={cliente.endereco.estado}
+                    icon={<LocationCityIcon fontSize="small" />}
+                  />
+                </Grid>
+                
+                {/* Segunda linha */}
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Logradouro" 
+                    value={cliente.endereco.logradouro}
+                    icon={<HomeIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Complemento" 
+                    value={cliente.endereco.complemento}
+                    icon={<ApartmentIcon fontSize="small" />}
+                  />
+                </Grid>
+                <Grid xs={12} md={4}>
+                  <InfoItem 
+                    label="Cidade" 
+                    value={cliente.endereco.cidade}
+                    icon={<LocationCityIcon fontSize="small" />}
+                  />
+                </Grid>
+              </Grid>
             </Sheet>
           )}
           
@@ -201,38 +492,27 @@ export default function ClienteView({ cliente, onEditClick }: ClienteViewProps) 
               sx={{ 
                 borderRadius: 'md', 
                 p: 3,
-                mb: 3,
+                width: '100%',
+                boxShadow: 'none',
+                backgroundColor: 'background.surface',
               }}
             >
-              <Typography level="title-md" startDecorator={<EventNoteIcon />} sx={{ mb: 2 }}>
+              <Typography 
+                level="title-md" 
+                sx={{ 
+                  mb: 2, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 1,
+                  color: 'primary.600',
+                  '& svg': { color: 'primary.500' }
+                }}
+              >
+                <EventNoteIcon />
                 Observações
               </Typography>
               
-              <Typography>{cliente.observacoes}</Typography>
-            </Sheet>
-          )}
-        </Grid>
-        
-        <Grid xs={12} md={6}>
-          {/* Cônjuge (PF) */}
-          {isPF && cliente.conjuge && (
-            <Sheet 
-              variant="outlined" 
-              sx={{ 
-                borderRadius: 'md', 
-                p: 3,
-                mb: 3,
-              }}
-            >
-              <Typography level="title-md" startDecorator={<FamilyRestroomIcon />} sx={{ mb: 2 }}>
-                Dados do Cônjuge
-              </Typography>
-              
-              <InfoItem label="Nome" value={cliente.conjuge.nome} />
-              <InfoItem label="CPF" value={cliente.conjuge.cpf} />
-              <InfoItem label="RG" value={cliente.conjuge.rg} />
-              <InfoItem label="Nacionalidade" value={cliente.conjuge.nacionalidade} />
-              <InfoItem label="Data de Nascimento" value={cliente.conjuge.dataNascimento} />
+              <Typography sx={{ whiteSpace: 'pre-wrap' }}>{cliente.observacoes}</Typography>
             </Sheet>
           )}
           
@@ -243,10 +523,23 @@ export default function ClienteView({ cliente, onEditClick }: ClienteViewProps) 
               sx={{ 
                 borderRadius: 'md', 
                 p: 3,
-                mb: 3,
+                width: '100%',
+                boxShadow: 'none',
+                backgroundColor: 'background.surface',
               }}
             >
-              <Typography level="title-md" startDecorator={<SupervisorAccountIcon />} sx={{ mb: 2 }}>
+              <Typography 
+                level="title-md" 
+                sx={{ 
+                  mb: 2, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 1,
+                  color: 'primary.600',
+                  '& svg': { color: 'primary.500' }
+                }}
+              >
+                <SupervisorAccountIcon />
                 Sócios
               </Typography>
               
@@ -254,7 +547,12 @@ export default function ClienteView({ cliente, onEditClick }: ClienteViewProps) 
                 <Card
                   key={socio.id}
                   variant="soft"
-                  sx={{ mb: 2, p: 2 }}
+                  sx={{ 
+                    mb: 2, 
+                    p: 2,
+                    backgroundColor: 'background.level1',
+                    boxShadow: 'none',
+                  }}
                 >
                   <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
                     <Typography level="title-sm">{socio.nome}</Typography>
@@ -265,32 +563,85 @@ export default function ClienteView({ cliente, onEditClick }: ClienteViewProps) 
                     )}
                   </Stack>
                   
-                  <Grid container spacing={2}>
-                    <Grid xs={12} sm={6}>
+                  <Grid container spacing={2} sx={{ mt: 0 }}>
+                    <Grid xs={12} sm={4}>
                       <InfoItem label="CPF" value={socio.cpf} />
                     </Grid>
-                    <Grid xs={12} sm={6}>
+                    <Grid xs={12} sm={4}>
                       <InfoItem label="RG" value={socio.rg} />
+                    </Grid>
+                    <Grid xs={12} sm={4}>
+                      <InfoItem label="Data de Nascimento" value={socio.dataNascimento} />
+                    </Grid>
+                    <Grid xs={12} sm={4}>
+                      <InfoItem label="Nacionalidade" value={socio.nacionalidade} />
+                    </Grid>
+                    <Grid xs={12} sm={8}>
+                      {/* Espaço reservado para futuros campos */}
                     </Grid>
                   </Grid>
                   
-                  <InfoItem label="Nacionalidade" value={socio.nacionalidade} />
-                  <InfoItem label="Data de Nascimento" value={socio.dataNascimento} />
-                  
                   {socio.endereco && (
-                    <Box sx={{ mt: 1 }}>
-                      <Typography level="body-sm" sx={{ color: 'text.secondary' }}>
+                    <Box sx={{ mt: 2 }}>
+                      <Typography level="body-sm" 
+                        sx={{ 
+                          color: 'text.secondary', 
+                          mb: 1.5, 
+                          fontWeight: 'medium',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 0.5
+                        }}
+                      >
+                        <LocationOnIcon fontSize="small" sx={{ fontSize: '1rem', color: 'primary.500' }} />
                         Endereço
                       </Typography>
-                      <Typography level="body-xs">
-                        {[
-                          socio.endereco.logradouro,
-                          socio.endereco.bairro,
-                          socio.endereco.cidade,
-                          socio.endereco.estado,
-                          socio.endereco.cep
-                        ].filter(Boolean).join(', ')}
-                      </Typography>
+                      
+                      <Grid container spacing={2} sx={{ mt: 0 }}>
+                        <Grid xs={12} md={4}>
+                          <InfoItem 
+                            label="CEP" 
+                            value={socio.endereco.cep}
+                            icon={<MarkunreadMailboxIcon fontSize="small" />}
+                          />
+                        </Grid>
+                        <Grid xs={12} md={4}>
+                          <InfoItem 
+                            label="Bairro" 
+                            value={socio.endereco.bairro}
+                            icon={<PlaceIcon fontSize="small" />}
+                          />
+                        </Grid>
+                        <Grid xs={12} md={4}>
+                          <InfoItem 
+                            label="Estado" 
+                            value={socio.endereco.estado}
+                            icon={<LocationCityIcon fontSize="small" />}
+                          />
+                        </Grid>
+                        
+                        <Grid xs={12} md={4}>
+                          <InfoItem 
+                            label="Logradouro" 
+                            value={socio.endereco.logradouro}
+                            icon={<HomeIcon fontSize="small" />}
+                          />
+                        </Grid>
+                        <Grid xs={12} md={4}>
+                          <InfoItem 
+                            label="Complemento" 
+                            value={socio.endereco.complemento}
+                            icon={<ApartmentIcon fontSize="small" />}
+                          />
+                        </Grid>
+                        <Grid xs={12} md={4}>
+                          <InfoItem 
+                            label="Cidade" 
+                            value={socio.endereco.cidade}
+                            icon={<LocationCityIcon fontSize="small" />}
+                          />
+                        </Grid>
+                      </Grid>
                     </Box>
                   )}
                 </Card>
@@ -305,22 +656,80 @@ export default function ClienteView({ cliente, onEditClick }: ClienteViewProps) 
               sx={{ 
                 borderRadius: 'md', 
                 p: 3,
+                width: '100%',
                 mb: 3,
+                boxShadow: 'none',
+                backgroundColor: 'background.surface',
               }}
             >
-              <Typography level="title-md" startDecorator={<AttachmentIcon />} sx={{ mb: 2 }}>
+              <Typography 
+                level="title-md" 
+                sx={{ 
+                  mb: 2, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  gap: 1,
+                  color: 'primary.600',
+                  '& svg': { color: 'primary.500' }
+                }}
+              >
+                <AttachmentIcon />
                 Documentos
               </Typography>
               
-              <Stack spacing={1}>
+              <Grid container spacing={2} sx={{ mt: 0 }}>
+                {/* Lista de documentos distribuídos em grid */}
                 {cliente.documentos.map((doc) => (
-                  <DocumentoItem key={doc.id} documento={doc} />
+                  <Grid key={doc.id} xs={12} md={3}>
+                    <DocumentoItem documento={doc} />
+                  </Grid>
                 ))}
-              </Stack>
+              </Grid>
             </Sheet>
           )}
-        </Grid>
-      </Grid>
-    </Stack>
+        </Stack>
+      </Box>
+      
+      {/* Ações no rodapé - no footer do formulário */}
+      <Box
+        sx={{ 
+          position: 'sticky',
+          bottom: 0,
+          zIndex: 10,
+          py: 1.5,
+          mx: -3, 
+          px: 3, 
+          display: 'flex', 
+          justifyContent: 'flex-end', 
+          gap: 2,
+          backgroundColor: 'background.surface',
+          borderTop: '1px solid',
+          borderColor: 'divider',
+          boxShadow: 'none',
+          width: 'auto',
+          height: 65,
+          mt: 3
+        }}
+      >
+        <Button
+          variant="outlined"
+          color="neutral"
+          startDecorator={<CancelIcon />}
+          onClick={onCancelClick}
+          sx={{ width: 118 }}
+        >
+          Voltar
+        </Button>
+        <Button
+          variant="solid"
+          color="primary"
+          startDecorator={<EditIcon />}
+          onClick={onEditClick}
+          sx={{ width: 118 }}
+        >
+          Editar
+        </Button>
+      </Box>
+    </Box>
   );
 } 

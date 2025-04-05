@@ -18,6 +18,7 @@ export default function ClientesPage() {
   const [loading, setLoading] = React.useState<boolean>(true);
   const [searchTerm, setSearchTerm] = React.useState<string>('');
   const [error, setError] = React.useState<string | null>(null);
+  const [viewMode, setViewMode] = React.useState<'view' | 'edit' | null>(null);
   
   // Carregar lista de clientes
   const loadClientes = React.useCallback(async () => {
@@ -58,11 +59,23 @@ export default function ClientesPage() {
   // Manipuladores de eventos
   const handleClienteSelect = (id: string) => {
     setSelectedClienteId(id);
+    setViewMode('view');
+  };
+  
+  const handleClienteView = (id: string) => {
+    setSelectedClienteId(id);
+    setViewMode('view');
+  };
+  
+  const handleClienteEdit = (id: string) => {
+    setSelectedClienteId(id);
+    setViewMode('edit');
   };
   
   const handleClienteCreate = (cliente: Cliente) => {
     setClientes(prev => [...prev, cliente]);
     setSelectedClienteId(cliente.id);
+    setViewMode('view');
   };
   
   const handleClienteUpdate = (cliente: Cliente) => {
@@ -74,6 +87,7 @@ export default function ClientesPage() {
   const handleClienteDelete = (id: string) => {
     setClientes(prev => prev.filter(c => c.id !== id));
     setSelectedClienteId(null);
+    setViewMode(null);
   };
   
   const handleSearch = (term: string) => {
@@ -82,6 +96,13 @@ export default function ClientesPage() {
   
   const handleAddClienteClick = () => {
     setSelectedClienteId(null);
+    setViewMode(null);
+    window.location.hash = 'create-client';
+  };
+  
+  const handleCancelView = () => {
+    setSelectedClienteId(null);
+    setViewMode(null);
   };
   
   return (
@@ -116,13 +137,18 @@ export default function ClientesPage() {
             onClienteSelect={handleClienteSelect}
             onAddClienteClick={handleAddClienteClick}
             onSearch={handleSearch}
+            onClienteView={handleClienteView}
+            onClienteEdit={handleClienteEdit}
+            onClienteDelete={handleClienteDelete}
           />
           
           <ClienteFormPane
             selectedClienteId={selectedClienteId}
+            viewMode={viewMode}
             onClienteCreated={handleClienteCreate}
             onClienteUpdated={handleClienteUpdate}
             onClienteDeleted={handleClienteDelete}
+            onCancelView={handleCancelView}
           />
         </>
       )}

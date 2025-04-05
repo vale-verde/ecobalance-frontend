@@ -23,16 +23,20 @@ type FormMode = 'empty' | 'view' | 'edit' | 'create';
 
 type ClienteFormPaneProps = {
   selectedClienteId?: string | null;
+  viewMode?: 'view' | 'edit' | null;
   onClienteCreated?: (cliente: Cliente) => void;
   onClienteUpdated?: (cliente: Cliente) => void;
   onClienteDeleted?: (id: string) => void;
+  onCancelView?: () => void;
 };
 
 export default function ClienteFormPane({
   selectedClienteId,
+  viewMode,
   onClienteCreated,
   onClienteUpdated,
-  onClienteDeleted
+  onClienteDeleted,
+  onCancelView
 }: ClienteFormPaneProps) {
   // Estado para controlar o modo do formulário
   const [mode, setMode] = React.useState<FormMode>('empty');
@@ -44,7 +48,31 @@ export default function ClienteFormPane({
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | null>(null);
   
-  // Carregar cliente quando o ID mudar
+  // Efeito para responder a alterações no #create-client via URL
+  React.useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash === '#create-client') {
+        setMode('create');
+        setCurrentCliente(null);
+        window.location.hash = '';
+      }
+    };
+    
+    window.addEventListener('hashchange', handleHashChange);
+    
+    // Verificar no carregamento inicial também
+    if (window.location.hash === '#create-client') {
+      setMode('create');
+      setCurrentCliente(null);
+      window.location.hash = '';
+    }
+    
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
+  
+  // Carregar cliente quando o ID mudar ou o viewMode mudar
   React.useEffect(() => {
     if (selectedClienteId) {
       setLoading(true);
@@ -54,7 +82,8 @@ export default function ClienteFormPane({
         .then(cliente => {
           if (cliente) {
             setCurrentCliente(cliente);
-            setMode('view');
+            // Definir o modo com base no viewMode recebido das props
+            setMode(viewMode === 'edit' ? 'edit' : 'view');
           }
           setLoading(false);
         })
@@ -67,12 +96,18 @@ export default function ClienteFormPane({
       setMode('empty');
       setCurrentCliente(null);
     }
-  }, [selectedClienteId]);
+  }, [selectedClienteId, viewMode]);
   
   // Função para criar um novo cliente
   const handleCreateCliente = () => {
     setMode('create');
     setCurrentCliente(null);
+  };
+  
+  // Função para visualizar cliente
+  const handleViewCliente = (cliente: Cliente) => {
+    setCurrentCliente(cliente);
+    setMode('view');
   };
   
   // Função para editar cliente atual
@@ -82,9 +117,11 @@ export default function ClienteFormPane({
     }
   };
   
-  // Função para cancelar edição/criação
+  // Função para cancelar edição/criação ou visualização
   const handleCancelEdit = () => {
-    if (currentCliente) {
+    if (mode === 'view' && onCancelView) {
+      onCancelView();
+    } else if (currentCliente) {
       setMode('view');
     } else {
       setMode('empty');
@@ -149,43 +186,6 @@ export default function ClienteFormPane({
     }
   };
   
-  // Renderizar título com base no modo
-  const renderTitle = () => {
-    switch (mode) {
-      case 'view':
-        return (
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-            <Typography level="h3">Detalhes do Cliente</Typography>
-            <Box>
-              <Button
-                color="primary"
-                startDecorator={<EditIcon />}
-                onClick={handleEditCliente}
-                sx={{ mr: 1 }}
-              >
-                Editar
-              </Button>
-              <Button
-                color="danger"
-                startDecorator={<DeleteIcon />}
-                onClick={handleDeleteCliente}
-                variant="soft"
-              >
-                Excluir
-              </Button>
-            </Box>
-          </Box>
-        );
-      case 'edit':
-        return <Typography level="h3" sx={{ mb: 3 }}>Editar Cliente</Typography>;
-      case 'create':
-        // Não renderizar título em modo de criação, já que ClienteForm tem seu próprio cabeçalho
-        return null;
-      default:
-        return null;
-    }
-  };
-  
   // Renderizar conteúdo com base no modo
   const renderContent = () => {
     if (loading) {
@@ -208,11 +208,18 @@ export default function ClienteFormPane({
       case 'empty':
         return <ClienteEmptyState onCreateClick={handleCreateCliente} />;
       case 'view':
-        return currentCliente ? <ClienteView cliente={currentCliente} onEditClick={handleEditCliente} /> : null;
+        return currentCliente ? (
+          <ClienteView 
+            cliente={currentCliente} 
+            onEditClick={handleEditCliente} 
+            onCancelClick={handleCancelEdit}
+          />
+        ) : null;
       case 'edit':
         return currentCliente ? (
           <ClienteForm
             cliente={currentCliente}
+            isCreating={false}
             onSave={handleSaveCliente}
             onCancel={handleCancelEdit}
           />
@@ -220,7 +227,7 @@ export default function ClienteFormPane({
       case 'create':
         return (
           <ClienteForm
-            isCreating
+            isCreating={true}
             onSave={handleSaveCliente}
             onCancel={handleCancelEdit}
           />
@@ -245,7 +252,6 @@ export default function ClienteFormPane({
         backgroundColor: 'background.level1',
       }}
     >
-      {renderTitle()}
       {renderContent()}
     </Sheet>
   );

@@ -56,6 +56,7 @@ export default function ClienteEmptyState({ onCreateClick }: ClienteEmptyStatePr
         startDecorator={<PersonAddIcon />}
         onClick={onCreateClick}
         sx={{ mt: 2 }}
+        data-testid="empty-state-create-button"
       >
         Criar Novo Cliente
       </Button>

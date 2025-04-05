@@ -23,6 +23,9 @@ type ClientesListPaneProps = {
   onClienteSelect: (id: string) => void;
   onAddClienteClick: () => void;
   onSearch: (searchTerm: string) => void;
+  onClienteView?: (id: string) => void;
+  onClienteEdit?: (id: string) => void;
+  onClienteDelete?: (id: string) => void;
 };
 
 export default function ClientesListPane({
@@ -31,7 +34,10 @@ export default function ClientesListPane({
   selectedClienteId,
   onClienteSelect,
   onAddClienteClick,
-  onSearch
+  onSearch,
+  onClienteView,
+  onClienteEdit,
+  onClienteDelete
 }: ClientesListPaneProps) {
   const [searchValue, setSearchValue] = React.useState('');
   const [page, setPage] = React.useState(1);
@@ -102,26 +108,50 @@ export default function ClientesListPane({
         </IconButton>
       </Stack>
       <Box sx={{ px: 2, pb: 1.5, display: 'flex', gap: 1 }}>
-        <Input
-          size="sm"
-          startDecorator={<SearchRoundedIcon />}
-          placeholder="Pesquisar clientes..."
-          aria-label="Search"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          sx={{ flex: 1 }}
-        />
+        <form onSubmit={handleSearch} style={{ flex: 1, display: 'flex' }}>
+          <Input
+            size="sm"
+            startDecorator={<SearchRoundedIcon />}
+            placeholder="Pesquisar clientes..."
+            aria-label="Search"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            sx={{ flex: 1 }}
+            endDecorator={
+              searchValue && (
+                <IconButton 
+                  size="sm" 
+                  variant="plain" 
+                  color="neutral" 
+                  onClick={() => {
+                    setSearchValue('');
+                    onSearch('');
+                  }}
+                >
+                  <CloseRoundedIcon />
+                </IconButton>
+              )
+            }
+          />
+        </form>
         <IconButton
           color="primary"
-          aria-label="add client"
+          aria-label="Criar novo cliente"
           variant="outlined"
-          onClick={onAddClienteClick}
+          onClick={() => {
+            onAddClienteClick();
+          }}
           sx={{
             height: '36px',
             width: '36px',
             '& svg': {
               fontSize: '1.2rem',
             },
+            transition: 'all 0.2s',
+            '&:hover': {
+              bgcolor: 'primary.softBg',
+              borderColor: 'primary.outlinedHoverBorder',
+            }
           }}
         >
           <AddIcon />
@@ -152,6 +182,9 @@ export default function ClientesListPane({
                   cliente={cliente}
                   isSelected={cliente.id === selectedClienteId}
                   onClick={() => onClienteSelect(cliente.id)}
+                  onView={onClienteView ? () => onClienteView(cliente.id) : undefined}
+                  onEdit={onClienteEdit ? () => onClienteEdit(cliente.id) : undefined}
+                  onDelete={onClienteDelete ? () => onClienteDelete(cliente.id) : undefined}
                 />
               ))
             ) : (

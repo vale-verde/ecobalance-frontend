@@ -43,9 +43,34 @@ export default function ClienteListItem({
   const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null);
   const menuOpen = Boolean(menuAnchorEl);
 
+  // Referência para detectar cliques fora do menu
+  const menuRef = React.useRef<HTMLDivElement>(null);
+
+  // Manipulador de cliques para fechar o menu quando clicado fora
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node) && menuOpen) {
+        setMenuAnchorEl(null);
+      }
+    }
+
+    // Adicionar o event listener apenas quando o menu estiver aberto
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuOpen]);
+
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    setMenuAnchorEl(event.currentTarget);
+    if (menuOpen) {
+      setMenuAnchorEl(null);
+    } else {
+      setMenuAnchorEl(event.currentTarget);
+    }
   };
 
   const handleMenuClose = () => {
@@ -84,7 +109,11 @@ export default function ClienteListItem({
         <ListItemButton
           onClick={() => {
             toggleSidebar();
-            onClick();
+            if (onView) {
+              onView();
+            } else {
+              onClick();
+            }
           }}
           selected={isSelected}
           color="neutral"
@@ -100,15 +129,31 @@ export default function ClienteListItem({
                 color="neutral"
                 size="sm"
                 onClick={handleMenuClick}
+                aria-label="Opções"
+                sx={{
+                  transition: 'all 0.2s',
+                  '&:hover': {
+                    bgcolor: 'primary.softBg',
+                    color: 'primary.500',
+                  },
+                  ...(menuOpen && {
+                    bgcolor: 'primary.softBg',
+                    color: 'primary.500',
+                  })
+                }}
               >
                 <MoreVertIcon fontSize="small" />
               </IconButton>
               <Menu
+                ref={menuRef}
                 anchorEl={menuAnchorEl}
                 open={menuOpen}
                 onClose={handleMenuClose}
                 placement="bottom-end"
-                sx={{ zIndex: 1500 }}
+                sx={{ 
+                  zIndex: 1500,
+                  '--Menu-decoratorWidth': '2rem',
+                }}
               >
                 <MenuItem onClick={handleViewClick}>
                   <ListItemDecorator>
