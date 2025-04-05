@@ -40,6 +40,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { Cliente, Documento, Socio, Endereco } from '../../data/clientes';
 import NacionalidadeSelector, { CountryType } from './NacionalidadeSelector';
+import { customScrollbarStyle } from '../../utils';
 
 /**
  * Props para o componente de formulário de cliente
@@ -512,7 +513,9 @@ export default function ClienteForm({
       height: '100%', 
       display: 'flex', 
       flexDirection: 'column',
-      position: 'relative'
+      position: 'relative',
+      overflow: 'auto',
+      ...customScrollbarStyle
     }}>
       {/* Cabeçalho do Formulário */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3, pt: 1 }}>
@@ -1325,9 +1328,10 @@ export default function ClienteForm({
         sx={{ 
           position: 'sticky',
           bottom: 0,
+          left: 0,
+          right: 0,
           zIndex: 10,
           py: 1.5,
-          mx: -3, 
           px: 3, 
           display: 'flex', 
           justifyContent: 'flex-end', 
@@ -1336,9 +1340,11 @@ export default function ClienteForm({
           borderTop: '1px solid',
           borderColor: 'divider',
           boxShadow: '0 -2px 10px rgba(0,0,0,0.05)',
-          width: 'auto',
+          width: '100%',
           height: 65,
-          mt: 0
+          marginLeft: 0,
+          marginRight: 0,
+          boxSizing: 'border-box',
         }}
       >
         <Button

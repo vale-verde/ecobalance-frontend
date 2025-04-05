@@ -17,6 +17,7 @@ import {
 import ClienteEmptyState from './cliente-form/ClienteEmptyState';
 import ClienteView from './cliente-form/ClienteView';
 import ClienteForm from './cliente-form/ClienteForm';
+import { customScrollbarStyle } from '../utils';
 
 /**
  * Modos possíveis para o painel de formulário de cliente
@@ -227,6 +228,7 @@ export default function ClienteFormPane({
             cliente={currentCliente} 
             onEditClick={handleEditCliente} 
             onCancelClick={handleCancelEdit}
+            onDeleteClick={handleDeleteCliente}
           />
         ) : null;
       case 'edit':
@@ -263,6 +265,7 @@ export default function ClienteFormPane({
         pb: 0,
         display: 'flex',
         flexDirection: 'column',
+        ...customScrollbarStyle
       }}
     >
       <Box 
@@ -272,49 +275,6 @@ export default function ClienteFormPane({
           flex: 1,
         }}
       >
-        {/* Cabeçalho com título e botões de ação */}
-        <Box 
-          sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'space-between',
-            mb: 2
-          }}
-        >
-          <Typography 
-            level="h3"
-            sx={{ 
-              fontSize: { xs: 'xl', md: 'xl2' },
-              fontWeight: 'bold' 
-            }}
-          >
-            {mode === 'view' && currentCliente ? 'Detalhes do Cliente' : 
-             mode === 'edit' && currentCliente ? 'Editar Cliente' : 
-             mode === 'create' ? 'Novo Cliente' : 'Cliente'}
-          </Typography>
-          
-          {mode === 'view' && currentCliente && (
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <Button
-                startDecorator={<EditIcon />}
-                color="primary"
-                variant="soft"
-                onClick={handleEditCliente}
-              >
-                Editar
-              </Button>
-              <Button
-                startDecorator={<DeleteIcon />}
-                color="danger"
-                variant="soft"
-                onClick={handleDeleteCliente}
-              >
-                Excluir
-              </Button>
-            </Box>
-          )}
-        </Box>
-        
         {/* Conteúdo principal */}
         {renderContent()}
       </Box>

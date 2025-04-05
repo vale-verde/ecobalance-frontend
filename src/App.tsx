@@ -17,10 +17,21 @@ import OrderList from './components/OrderList';
 import Header from './components/Header';
 import ClientesPage from './pages/ClientesPage';
 
+/**
+ * Componente principal da aplicação Ecobalance
+ * 
+ * Funcionalidades:
+ * - Gerenciamento de navegação entre páginas
+ * - Fornecimento do contexto de navegação para componentes filhos
+ * - Layout responsivo com barra lateral e conteúdo principal
+ */
 export default function JoyOrderDashboardTemplate() {
   const [currentPage, setCurrentPage] = React.useState<string>('dashboard');
   
-  // Simple routing function
+  /**
+   * Renderiza a página atual com base na navegação
+   * Implementa roteamento simples entre as páginas da aplicação
+   */
   const renderCurrentPage = () => {
     switch (currentPage) {
       case 'clientes':
@@ -47,6 +58,7 @@ export default function JoyOrderDashboardTemplate() {
               gap: 1,
             }}
           >
+            {/* Breadcrumbs para navegação */}
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Breadcrumbs
                 size="sm"
@@ -57,7 +69,7 @@ export default function JoyOrderDashboardTemplate() {
                 <Link
                   underline="none"
                   color="neutral"
-                  href="#some-link"
+                  href="#home"
                   aria-label="Home"
                 >
                   <HomeRoundedIcon />
@@ -65,16 +77,18 @@ export default function JoyOrderDashboardTemplate() {
                 <Link
                   underline="hover"
                   color="neutral"
-                  href="#some-link"
+                  href="#dashboard"
                   sx={{ fontSize: 12, fontWeight: 500 }}
                 >
                   Dashboard
                 </Link>
                 <Typography color="primary" sx={{ fontWeight: 500, fontSize: 12 }}>
-                  Orders
+                  Pedidos
                 </Typography>
               </Breadcrumbs>
             </Box>
+            
+            {/* Cabeçalho da página de pedidos */}
             <Box
               sx={{
                 display: 'flex',
@@ -87,7 +101,7 @@ export default function JoyOrderDashboardTemplate() {
               }}
             >
               <Typography level="h2" component="h1">
-                Orders
+                Pedidos
               </Typography>
               <Button
                 color="primary"
@@ -97,6 +111,8 @@ export default function JoyOrderDashboardTemplate() {
                 Download PDF
               </Button>
             </Box>
+            
+            {/* Componentes de visualização de pedidos */}
             <OrderTable />
             <OrderList />
           </Box>
@@ -104,7 +120,9 @@ export default function JoyOrderDashboardTemplate() {
     }
   };
 
-  // Create a context to share the navigation state
+  /**
+   * Contexto de navegação para compartilhar o estado entre componentes
+   */
   const NavigationContext = React.createContext({
     currentPage,
     setCurrentPage,

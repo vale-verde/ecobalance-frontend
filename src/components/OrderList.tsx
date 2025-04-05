@@ -92,7 +92,7 @@ const listItems = [
 ];
 
 /**
- * Componente de menu de ações para cada item da lista
+ * Menu de opções para cada item da lista
  */
 function RowMenu() {
   return (
@@ -164,7 +164,7 @@ export default function OrderList() {
                 {/* Ações disponíveis */}
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <Link level="body-sm" component="button">
-                    Baixar
+                    Download
                   </Link>
                   <RowMenu />
                 </Box>

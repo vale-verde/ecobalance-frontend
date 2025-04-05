@@ -222,7 +222,7 @@ const rows = [
 ];
 
 /**
- * Função auxiliar que determina se um valor é menor que outro para ordenação.
+ * Função auxiliar que determina se um valor é menor que outro para ordenação
  */
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -252,7 +252,7 @@ function getComparator<Key extends keyof any>(
 }
 
 /**
- * Componente de menu de ações para cada linha da tabela
+ * Menu de opções para cada linha da tabela
  */
 function RowMenu() {
   return (
@@ -275,8 +275,13 @@ function RowMenu() {
 }
 
 /**
- * Componente de tabela de pedidos com funcionalidades de ordenação,
- * paginação e filtros
+ * Componente principal de tabela de pedidos
+ * 
+ * Exibe pedidos em formato tabular com recursos de:
+ * - Busca e filtragem
+ * - Ordenação de colunas
+ * - Seleção múltipla
+ * - Paginação
  */
 export default function OrderTable() {
   const [order, setOrder] = React.useState<Order>('desc');
@@ -284,7 +289,7 @@ export default function OrderTable() {
   const [open, setOpen] = React.useState(false);
 
   /**
-   * Renderiza os controles de filtros
+   * Renderiza os filtros de busca para desktop e tablet
    */
   const renderFilters = () => (
     <React.Fragment>
@@ -301,29 +306,25 @@ export default function OrderTable() {
           <Option value="cancelled">Cancelado</Option>
         </Select>
       </FormControl>
-
+      <FormControl size="sm">
+        <FormLabel>Categoria</FormLabel>
+        <Select size="sm" placeholder="Todos">
+          <Option value="all">Todos</Option>
+          <Option value="refund">Reembolso</Option>
+          <Option value="purchase">Compra</Option>
+          <Option value="debit">Débito</Option>
+        </Select>
+      </FormControl>
       <FormControl size="sm">
         <FormLabel>Cliente</FormLabel>
-        <Select size="sm" placeholder="Todos clientes">
+        <Select size="sm" placeholder="Todos">
           <Option value="all">Todos</Option>
           <Option value="olivia">Olivia Rhye</Option>
           <Option value="steve">Steve Hampton</Option>
           <Option value="ciaran">Ciaran Murray</Option>
-          <Option value="maria">Maria Macdonald</Option>
+          <Option value="marina">Marina Macdonald</Option>
           <Option value="charles">Charles Fulton</Option>
-          <Option value="jay">Jay Hooper</Option>
-        </Select>
-      </FormControl>
-
-      <FormControl size="sm">
-        <FormLabel>Data</FormLabel>
-        <Select size="sm" placeholder="Todas datas">
-          <Option value="all">Todas</Option>
-          <Option value="last-hour">Última hora</Option>
-          <Option value="last-day">Último dia</Option>
-          <Option value="last-week">Última semana</Option>
-          <Option value="last-month">Último mês</Option>
-          <Option value="last-year">Último ano</Option>
+          <Option value="jay">Jay Hoper</Option>
         </Select>
       </FormControl>
     </React.Fragment>
@@ -331,90 +332,64 @@ export default function OrderTable() {
 
   return (
     <React.Fragment>
-      {/* Modal de filtros para visão mobile */}
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <ModalDialog
-          aria-labelledby="filter-modal"
-          layout="fullscreen"
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 2,
-          }}
+      {/* Barra de pesquisa e filtros para dispositivos móveis */}
+      <Sheet
+        className="SearchAndFilters-mobile"
+        sx={{ display: { xs: 'flex', sm: 'none' }, my: 1, gap: 1 }}
+      >
+        <Input
+          size="sm"
+          placeholder="Pesquisar"
+          startDecorator={<SearchIcon />}
+          sx={{ flexGrow: 1 }}
+        />
+        <IconButton
+          size="sm"
+          variant="outlined"
+          color="neutral"
+          onClick={() => setOpen(true)}
         >
-          <ModalClose />
-          <Typography id="filter-modal" level="h2">
-            Filtros
-          </Typography>
-          <Divider sx={{ mt: 1 }} />
-          <Sheet sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {renderFilters()}
-            <Button color="primary" onClick={() => setOpen(false)}>
-              Aplicar filtros
-            </Button>
-          </Sheet>
-        </ModalDialog>
-      </Modal>
+          <FilterAltIcon />
+        </IconButton>
+        <Modal open={open} onClose={() => setOpen(false)}>
+          <ModalDialog aria-labelledby="filter-modal" layout="fullscreen">
+            <ModalClose />
+            <Typography id="filter-modal" level="h2">
+              Filtros
+            </Typography>
+            <Divider sx={{ my: 2 }} />
+            <Sheet sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {renderFilters()}
+              <Button color="primary" onClick={() => setOpen(false)}>
+                Aplicar
+              </Button>
+            </Sheet>
+          </ModalDialog>
+        </Modal>
+      </Sheet>
 
-      {/* Barra de ferramentas da tabela */}
+      {/* Barra de pesquisa e filtros para tablet e desktop */}
       <Box
+        className="SearchAndFilters-tabletUp"
         sx={{
-          display: 'flex',
-          mb: 2,
-          gap: 1,
-          flexDirection: { xs: 'column', sm: 'row' },
-          alignItems: { xs: 'start', sm: 'center' },
+          borderRadius: 'sm',
+          py: 2,
+          display: { xs: 'none', sm: 'flex' },
           flexWrap: 'wrap',
-          justifyContent: 'space-between',
+          gap: 1.5,
+          '& > *': {
+            minWidth: { xs: '120px', md: '160px' },
+          },
         }}
       >
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <Typography level="h3">Pedidos</Typography>
-          <Chip variant="outlined" color="neutral" size="sm">
-            {rows.length} pedidos
-          </Chip>
-        </Box>
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <Box
-            sx={{
-              display: { xs: 'inline-flex', md: 'none' },
-            }}
-          >
-            <IconButton
-              variant="outlined"
-              color="neutral"
-              onClick={() => setOpen(true)}
-            >
-              <FilterAltIcon />
-            </IconButton>
-          </Box>
-          <Box
-            sx={{
-              display: { xs: 'none', md: 'flex' },
-              alignItems: 'center',
-              gap: 1,
-            }}
-          >
-            {renderFilters()}
-          </Box>
-          <Box sx={{ minWidth: 0, flex: 1 }}>
-            <FormControl sx={{ flex: 1 }} size="sm">
-              <Input
-                size="sm"
-                placeholder="Pesquisar por ID ou cliente"
-                startDecorator={<SearchIcon />}
-                endDecorator={
-                  <IconButton variant="plain" color="neutral" size="sm">
-                    <Typography level="body-xs">⌘ K</Typography>
-                  </IconButton>
-                }
-              />
-            </FormControl>
-          </Box>
-        </Box>
+        <FormControl sx={{ flex: 1 }} size="sm">
+          <FormLabel>Buscar pedido</FormLabel>
+          <Input size="sm" placeholder="Pesquisar" startDecorator={<SearchIcon />} />
+        </FormControl>
+        {renderFilters()}
       </Box>
 
-      {/* Tabela de pedidos */}
+      {/* Tabela para tablet e desktop */}
       <Sheet
         className="OrderTableContainer"
         variant="outlined"
@@ -439,7 +414,6 @@ export default function OrderTable() {
             '--TableCell-paddingX': '8px',
           }}
         >
-          {/* Cabeçalho da tabela */}
           <thead>
             <tr>
               <th style={{ width: 48, textAlign: 'center', padding: '12px 6px' }}>
@@ -468,9 +442,11 @@ export default function OrderTable() {
                   color="primary"
                   component="button"
                   onClick={() => setOrder(order === 'asc' ? 'desc' : 'asc')}
-                  fontWeight="lg"
                   endDecorator={<ArrowDropDownIcon />}
                   sx={{
+                    fontWeight: 'lg',
+                    display: 'inline-flex',
+                    alignItems: 'center',
                     '& svg': {
                       transition: '0.2s',
                       transform:
@@ -478,7 +454,7 @@ export default function OrderTable() {
                     },
                   }}
                 >
-                  ID
+                  Fatura
                 </Link>
               </th>
               <th style={{ width: 140, padding: '12px 6px' }}>Data</th>
@@ -487,37 +463,22 @@ export default function OrderTable() {
               <th style={{ width: 140, padding: '12px 6px' }}> </th>
             </tr>
           </thead>
-          
-          {/* Corpo da tabela */}
           <tbody>
-            {rows.map((row) => (
+            {[...rows].sort(getComparator(order, 'id')).map((row) => (
               <tr key={row.id}>
                 <td style={{ textAlign: 'center', width: 48 }}>
                   <Checkbox
                     size="sm"
-                    checked={selected.indexOf(row.id) !== -1}
+                    checked={selected.includes(row.id)}
+                    color={selected.includes(row.id) ? 'primary' : undefined}
                     onChange={(event) => {
-                      const selectedIndex = selected.indexOf(row.id);
-                      let newSelected: readonly string[] = [];
-
-                      if (selectedIndex === -1) {
-                        newSelected = newSelected.concat(selected, row.id);
-                      } else if (selectedIndex === 0) {
-                        newSelected = newSelected.concat(selected.slice(1));
-                      } else if (selectedIndex === selected.length - 1) {
-                        newSelected = newSelected.concat(selected.slice(0, -1));
-                      } else if (selectedIndex > 0) {
-                        newSelected = newSelected.concat(
-                          selected.slice(0, selectedIndex),
-                          selected.slice(selectedIndex + 1),
-                        );
-                      }
-
-                      setSelected(newSelected);
+                      setSelected((ids) =>
+                        event.target.checked
+                          ? ids.concat(row.id)
+                          : ids.filter((itemId) => itemId !== row.id),
+                      );
                     }}
-                    color={
-                      selected.indexOf(row.id) !== -1 ? 'primary' : undefined
-                    }
+                    slotProps={{ checkbox: { sx: { textAlign: 'left' } } }}
                     sx={{ verticalAlign: 'text-bottom' }}
                   />
                 </td>
@@ -561,7 +522,7 @@ export default function OrderTable() {
                 <td>
                   <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
                     <Link level="body-xs" component="button">
-                      Baixar
+                      Download
                     </Link>
                     <RowMenu />
                   </Box>
@@ -572,136 +533,48 @@ export default function OrderTable() {
         </Table>
       </Sheet>
 
-      {/* Visualização em cards para mobile */}
+      {/* Paginação para desktop */}
       <Box
-        className="OrderTableMobile"
-        sx={{ display: { xs: 'block', sm: 'none' }, paddingLeft: 1 }}
+        className="Pagination-laptopUp"
+        sx={{
+          pt: 2,
+          gap: 1,
+          [`& .${iconButtonClasses.root}`]: { borderRadius: '50%' },
+          display: {
+            xs: 'none',
+            md: 'flex',
+          },
+        }}
       >
-        {rows.map((row) => (
-          <Sheet
-            key={row.id}
-            variant="outlined"
-            sx={{
-              p: 2,
-              mb: 1.5,
-              borderRadius: 'sm',
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 2,
-            }}
-          >
-            <div>
-              <Typography level="body-xs">Pedido nº</Typography>
-              <Typography fontWeight="md">{row.id}</Typography>
-            </div>
-            <div>
-              <Typography level="body-xs">Data</Typography>
-              <Typography fontWeight="md">{row.date}</Typography>
-            </div>
-            <div>
-              <Typography level="body-xs">Cliente</Typography>
-              <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                <Avatar size="sm">{row.customer.initial}</Avatar>
-                <div>
-                  <Typography level="body-xs">{row.customer.name}</Typography>
-                  <Typography level="body-xs">{row.customer.email}</Typography>
-                </div>
-              </Box>
-            </div>
-            <div>
-              <Typography level="body-xs">Status</Typography>
-              <Chip
-                variant="soft"
-                size="sm"
-                startDecorator={
-                  {
-                    Paid: <CheckRoundedIcon />,
-                    Refunded: <AutorenewRoundedIcon />,
-                    Cancelled: <BlockIcon />,
-                  }[row.status]
-                }
-                color={
-                  {
-                    Paid: 'success',
-                    Refunded: 'neutral',
-                    Cancelled: 'danger',
-                  }[row.status] as ColorPaletteProp
-                }
-              >
-                {row.status}
-              </Chip>
-            </div>
-            <div>
-              <RowMenu />
-            </div>
-          </Sheet>
-        ))}
-      </Box>
+        <Button
+          size="sm"
+          variant="outlined"
+          color="neutral"
+          startDecorator={<KeyboardArrowLeftIcon />}
+        >
+          Anterior
+        </Button>
 
-      {/* Paginação */}
-      <Box
-        className="Pagination-mobile"
-        sx={{
-          display: { xs: 'flex', md: 'none' },
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <IconButton
-          aria-label="previous page"
+        <Box sx={{ flex: 1 }} />
+        {['1', '2', '3', '…', '8', '9', '10'].map((page) => (
+          <IconButton
+            key={page}
+            size="sm"
+            variant={Number(page) ? 'outlined' : 'plain'}
+            color="neutral"
+          >
+            {page}
+          </IconButton>
+        ))}
+        <Box sx={{ flex: 1 }} />
+        <Button
+          size="sm"
           variant="outlined"
           color="neutral"
-          size="sm"
+          endDecorator={<KeyboardArrowRightIcon />}
         >
-          <KeyboardArrowLeftIcon />
-        </IconButton>
-        <Typography level="body-sm">Página 1 de 10</Typography>
-        <IconButton
-          aria-label="next page"
-          variant="outlined"
-          color="neutral"
-          size="sm"
-        >
-          <KeyboardArrowRightIcon />
-        </IconButton>
-      </Box>
-      <Box
-        className="Pagination-desktop"
-        sx={{
-          display: { xs: 'none', md: 'flex' },
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <Typography level="body-sm">Linhas por página:</Typography>
-          <Select size="sm" defaultValue={10}>
-            <Option value={5}>5</Option>
-            <Option value={10}>10</Option>
-            <Option value={25}>25</Option>
-          </Select>
-        </Box>
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <Typography level="body-sm">1–5 de 13</Typography>
-          <Box sx={{ display: 'flex', gap: 0.5 }}>
-            <IconButton
-              aria-label="previous page"
-              variant="outlined"
-              color="neutral"
-              size="sm"
-            >
-              <KeyboardArrowLeftIcon />
-            </IconButton>
-            <IconButton
-              aria-label="next page"
-              variant="outlined"
-              color="neutral"
-              size="sm"
-            >
-              <KeyboardArrowRightIcon />
-            </IconButton>
-          </Box>
-        </Box>
+          Próximo
+        </Button>
       </Box>
     </React.Fragment>
   );

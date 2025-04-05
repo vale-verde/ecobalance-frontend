@@ -13,7 +13,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ClienteListItem from './ClienteListItem';
 import { Cliente } from '../data/clientes';
-import { toggleSidebar } from '../utils';
+import { toggleSidebar, customScrollbarStyle } from '../utils';
 import CircularProgress from '@mui/joy/CircularProgress';
 
 /**
@@ -180,6 +180,7 @@ export default function ClientesListPane({
           overflowY: 'auto',
           display: 'flex',
           flexDirection: 'column',
+          ...customScrollbarStyle
       }}>
         {loading ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>

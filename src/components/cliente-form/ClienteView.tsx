@@ -35,7 +35,9 @@ import PlaceIcon from '@mui/icons-material/Place';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Cliente, Documento, Socio } from '../../data/clientes';
+import { customScrollbarStyle } from '../../utils';
 
 /**
  * Props para o componente de visualização de cliente
@@ -44,6 +46,7 @@ type ClienteViewProps = {
   cliente: Cliente;
   onEditClick: () => void;
   onCancelClick?: () => void;
+  onDeleteClick?: () => void;
 };
 
 /**
@@ -162,7 +165,7 @@ function DocumentoItem({ documento }: DocumentoItemProps) {
  * Exibe todas as informações do cliente em um layout organizado,
  * incluindo dados pessoais/empresariais, endereço, documentos e sócios
  */
-export default function ClienteView({ cliente, onEditClick, onCancelClick }: ClienteViewProps) {
+export default function ClienteView({ cliente, onEditClick, onCancelClick, onDeleteClick }: ClienteViewProps) {
   const isPF = cliente.tipoCliente === 'PF';
   
   return (
@@ -222,22 +225,15 @@ export default function ClienteView({ cliente, onEditClick, onCancelClick }: Cli
         </Chip>
       </Box>
       
+      {/* Conteúdo scrollável */}
       <Box sx={{ 
         flex: 1, 
         display: 'flex', 
         flexDirection: 'column',
         width: '100%',
         overflow: 'auto',
-        paddingRight: '8px',
-        scrollbarWidth: 'thin',
-        '&::-webkit-scrollbar': {
-          width: '8px',
-          backgroundColor: 'transparent',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          backgroundColor: 'rgba(0,0,0,0.1)',
-          borderRadius: '4px',
-        },
+        ...customScrollbarStyle,
+        mb: 2,
       }}>
         <Stack spacing={3} sx={{ width: '100%' }}>
           {/* Dados Pessoais / Empresariais */}
@@ -711,45 +707,59 @@ export default function ClienteView({ cliente, onEditClick, onCancelClick }: Cli
         </Stack>
       </Box>
       
-      {/* Ações no rodapé - no footer do formulário */}
+      {/* Ações no rodapé - no footer do formulário - agora fora da área scrollável */}
       <Box
         sx={{ 
           position: 'sticky',
           bottom: 0,
+          left: 0,
+          right: 0,
           zIndex: 10,
           py: 1.5,
-          mx: -3, 
           px: 3, 
           display: 'flex', 
-          justifyContent: 'flex-end', 
-          gap: 2,
+          justifyContent: 'space-between', 
           backgroundColor: 'background.surface',
           borderTop: '1px solid',
           borderColor: 'divider',
           boxShadow: 'none',
-          width: 'auto',
+          width: '100%',
           height: 65,
-          mt: 3
+          marginLeft: 0,
+          marginRight: 0,
+          boxSizing: 'border-box',
         }}
       >
         <Button
           variant="outlined"
-          color="neutral"
-          startDecorator={<CancelIcon />}
-          onClick={onCancelClick}
+          color="danger"
+          startDecorator={<DeleteIcon />}
+          onClick={onDeleteClick}
           sx={{ width: 118 }}
         >
-          Voltar
+          Excluir
         </Button>
-        <Button
-          variant="solid"
-          color="primary"
-          startDecorator={<EditIcon />}
-          onClick={onEditClick}
-          sx={{ width: 118 }}
-        >
-          Editar
-        </Button>
+        
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <Button
+            variant="outlined"
+            color="neutral"
+            startDecorator={<CancelIcon />}
+            onClick={onCancelClick}
+            sx={{ width: 118 }}
+          >
+            Voltar
+          </Button>
+          <Button
+            variant="solid"
+            color="primary"
+            startDecorator={<EditIcon />}
+            onClick={onEditClick}
+            sx={{ width: 118 }}
+          >
+            Editar
+          </Button>
+        </Box>
       </Box>
     </Box>
   );
