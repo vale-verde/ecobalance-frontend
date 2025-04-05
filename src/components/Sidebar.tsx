@@ -31,6 +31,9 @@ import { Popper } from '@mui/base/Popper';
 import ColorSchemeToggle from './ColorSchemeToggle';
 import { closeSidebar } from '../utils';
 
+/**
+ * Componente Toggler para seções expansíveis na barra lateral
+ */
 function Toggler({
   defaultExpanded = false,
   renderToggle,
@@ -70,27 +73,43 @@ type SidebarProps = {
   currentPage?: string;
 };
 
+/**
+ * Componente de barra lateral que fornece navegação com estado recolhível
+ * 
+ * Funcionalidades:
+ * - Barra lateral expansível/recolhível
+ * - Tooltips para o estado recolhido
+ * - Submenus flutuantes no estado recolhido
+ * - Navegação aninhada com menus dropdown
+ */
 export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: SidebarProps) {
+  // Estados principais
   const [collapsed, setCollapsed] = React.useState(false);
   const [showToggleButton, setShowToggleButton] = React.useState(false);
   const searchInputRef = React.useRef<HTMLInputElement>(null);
   
-  // Refs e estados para os menus flutuantes
+  /**
+   * Refs e estados para os submenus flutuantes
+   */
   const cadastrosAnchorRef = React.useRef(null);
   const usuariosAnchorRef = React.useRef(null);
   const [cadastrosOpen, setCadastrosOpen] = React.useState(false);
   const [usuariosOpen, setUsuariosOpen] = React.useState(false);
   const [mouseInCadastrosMenu, setMouseInCadastrosMenu] = React.useState(false);
   const [mouseInUsuariosMenu, setMouseInUsuariosMenu] = React.useState(false);
-
-  // Temporizadores para fechamento dos menus
   const cadastrosTimerRef = React.useRef<NodeJS.Timeout | null>(null);
   const usuariosTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
+  /**
+   * Alterna o estado recolhido da barra lateral
+   */
   const toggleCollapse = () => {
     setCollapsed(!collapsed);
   };
 
+  /**
+   * Manipula o clique no ícone de pesquisa no estado recolhido
+   */
   const handleSearchClick = () => {
     if (collapsed) {
       setCollapsed(false);
@@ -100,6 +119,9 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
     }
   };
 
+  /**
+   * Estilos compartilhados para botões no estado recolhido
+   */
   const collapsedButtonStyle = {
     justifyContent: 'center',
     alignItems: 'center',
@@ -130,7 +152,6 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
     },
   };
 
-  // Estilo padrão para tooltips e submenus flutuantes
   const popperStyles = {
     p: 0.75,
     boxShadow: 'sm',
@@ -141,7 +162,6 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
     minWidth: '180px',
   };
   
-  // Estilo para os tooltips (apenas propriedades suportadas pelo Tooltip)
   const tooltipStyle = {
     zIndex: 10002,
     '--joy-shadowRing': '0 0 0 1px var(--joy-palette-divider)',
@@ -150,14 +170,15 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
     '--Tooltip-borderRadius': '6px',
   };
 
-  // Funções para lidar com hover do Cadastros
+  /**
+   * Manipuladores de eventos para o menu flutuante de Cadastros
+   */
   const handleCadastrosMouseEnter = () => {
     if (cadastrosTimerRef.current) {
       clearTimeout(cadastrosTimerRef.current);
       cadastrosTimerRef.current = null;
     }
     
-    // Fechar o outro menu instantaneamente ao passar para este
     if (usuariosOpen) {
       setUsuariosOpen(false);
     }
@@ -188,14 +209,15 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
     }, 300);
   };
 
-  // Funções para lidar com hover do Usuários
+  /**
+   * Manipuladores de eventos para o menu flutuante de Usuários
+   */
   const handleUsuariosMouseEnter = () => {
     if (usuariosTimerRef.current) {
       clearTimeout(usuariosTimerRef.current);
       usuariosTimerRef.current = null;
     }
     
-    // Fechar o outro menu instantaneamente ao passar para este
     if (cadastrosOpen) {
       setCadastrosOpen(false);
     }
@@ -283,6 +305,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
         onClick={() => closeSidebar()}
       />
       
+      {/* Botão de recolher/expandir */}
       {showToggleButton && (
         <IconButton
           className="CollapseButton"
@@ -309,6 +332,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
         </IconButton>
       )}
       
+      {/* Seção do logotipo */}
       <Box sx={{ 
         display: 'flex', 
         alignItems: 'center',
@@ -340,6 +364,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
         )}
       </Box>
       
+      {/* Seção de pesquisa */}
       <Box sx={{ 
         display: 'flex',
         justifyContent: 'center',
@@ -364,7 +389,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
           <Input 
             size="sm" 
             startDecorator={<SearchRoundedIcon />} 
-            placeholder="Search" 
+            placeholder="Pesquisar" 
             slotProps={{
               input: {
                 ref: searchInputRef
@@ -375,6 +400,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
         )}
       </Box>
       
+      {/* Navegação principal */}
       <Box
         sx={{
           minHeight: 0,
@@ -410,6 +436,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
             }),
           }}
         >
+          {/* Item Dashboard */}
           <ListItem 
             sx={{
               width: '100%',
@@ -452,6 +479,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
             )}
           </ListItem>
 
+          {/* Item Ratificação */}
           <ListItem 
             sx={{
               width: '100%',
@@ -494,6 +522,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
             )}
           </ListItem>
 
+          {/* Submenu Cadastros */}
           <ListItem 
             nested
             sx={{
@@ -673,6 +702,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
             )}
           </ListItem>
           
+          {/* Submenu Usuários */}
           <ListItem 
             nested
             sx={{
@@ -858,6 +888,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
           </ListItem>
         </List>
         
+        {/* Itens de navegação do rodapé */}
         <List
           size="sm"
           sx={{
@@ -946,6 +977,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
         </List>
       </Box>
       
+      {/* Seção de perfil do usuário */}
       <Divider />
       <Box sx={{ 
         display: 'flex', 
@@ -969,7 +1001,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
         )}
         {collapsed ? (
           <Tooltip
-            title="Logout"
+            title="Sair"
             placement="right"
             variant="soft"
             sx={tooltipStyle}

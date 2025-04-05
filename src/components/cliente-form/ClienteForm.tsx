@@ -41,6 +41,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Cliente, Documento, Socio, Endereco } from '../../data/clientes';
 import NacionalidadeSelector, { CountryType } from './NacionalidadeSelector';
 
+/**
+ * Props para o componente de formulário de cliente
+ */
 type ClienteFormProps = {
   cliente?: Cliente;
   isCreating?: boolean;
@@ -48,10 +51,19 @@ type ClienteFormProps = {
   onCancel: () => void;
 };
 
+/**
+ * Tipo para armazenar erros de validação do formulário
+ */
 type FormErrors = {
   [key: string]: string;
 };
 
+/**
+ * Componente de formulário para cadastro e edição de clientes
+ * 
+ * Permite o gerenciamento completo de informações do cliente, incluindo
+ * dados pessoais, endereço, documentos e sócios (para pessoa jurídica)
+ */
 export default function ClienteForm({
   cliente,
   isCreating = false,
@@ -76,7 +88,9 @@ export default function ClienteForm({
   
   const isPF = formData.tipoCliente === 'PF';
   
-  // Função para atualizar o estado do formulário
+  /**
+   * Atualiza o estado do formulário quando um campo é alterado
+   */
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -96,7 +110,9 @@ export default function ClienteForm({
     }
   };
   
-  // Função para atualizar campos de endereço
+  /**
+   * Atualiza os campos de endereço no formulário
+   */
   const handleEnderecoChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -110,7 +126,9 @@ export default function ClienteForm({
     }));
   };
   
-  // Função para atualizar campos do cônjuge
+  /**
+   * Atualiza os campos do cônjuge para pessoa física
+   */
   const handleConjugeChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -133,7 +151,10 @@ export default function ClienteForm({
     });
   };
   
-  // Função para mudar o tipo de cliente
+  /**
+   * Altera o tipo de cliente entre pessoa física e jurídica,
+   * resetando os campos específicos de cada tipo
+   */
   const handleTipoClienteChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -148,7 +169,9 @@ export default function ClienteForm({
     }));
   };
   
-  // Função para adicionar um novo sócio
+  /**
+   * Adiciona um novo sócio à lista (apenas para pessoa jurídica)
+   */
   const handleAddSocio = () => {
     const newSocio: Partial<Socio> = {
       id: `socio-${Date.now()}`,
@@ -159,12 +182,16 @@ export default function ClienteForm({
     setSocios([...socios, newSocio]);
   };
   
-  // Função para remover um sócio
+  /**
+   * Remove um sócio da lista pelo ID
+   */
   const handleRemoveSocio = (id: string) => {
     setSocios(socios.filter((socio) => socio.id !== id));
   };
   
-  // Função para atualizar dados de um sócio
+  /**
+   * Atualiza os dados de um sócio específico
+   */
   const handleSocioChange = (
     id: string,
     field: string,
@@ -177,7 +204,9 @@ export default function ClienteForm({
     );
   };
   
-  // Função para atualizar o endereço de um sócio
+  /**
+   * Atualiza o endereço de um sócio específico
+   */
   const handleSocioEnderecoChange = (
     id: string,
     field: string,
@@ -198,7 +227,10 @@ export default function ClienteForm({
     );
   };
   
-  // Upload de documento simulado
+  /**
+   * Simula o upload de um novo documento para o cliente
+   * (Funcionalidade simplificada para demonstração)
+   */
   const handleDocumentoUpload = () => {
     // Simular upload de documento (adicionado arquivo para satisfazer tipagem)
     const newDocumento: Documento = {
@@ -215,7 +247,9 @@ export default function ClienteForm({
     }));
   };
   
-  // Remover documento
+  /**
+   * Remove um documento do cliente pelo ID
+   */
   const handleRemoveDocumento = (id: string) => {
     setFormData((prev) => ({
       ...prev,
@@ -223,7 +257,10 @@ export default function ClienteForm({
     }));
   };
   
-  // Validar formulário
+  /**
+   * Valida os campos do formulário conforme o tipo de cliente
+   * Retorna true se todos os campos obrigatórios estiverem preenchidos
+   */
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
     
@@ -256,7 +293,10 @@ export default function ClienteForm({
     return Object.keys(newErrors).length === 0;
   };
   
-  // Salvar cliente
+  /**
+   * Salva o cliente após validação dos campos
+   * Inclui sócios apenas se for pessoa jurídica
+   */
   const handleSave = () => {
     if (validateForm()) {
       // Adicionar sócios apenas se for PJ

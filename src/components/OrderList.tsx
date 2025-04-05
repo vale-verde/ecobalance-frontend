@@ -25,6 +25,9 @@ import AutorenewRoundedIcon from '@mui/icons-material/AutorenewRounded';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 
+/**
+ * Dados de exemplo para a lista de pedidos
+ */
 const listItems = [
   {
     id: 'INV-1234',
@@ -88,6 +91,9 @@ const listItems = [
   },
 ];
 
+/**
+ * Componente de menu de ações para cada item da lista
+ */
 function RowMenu() {
   return (
     <Dropdown>
@@ -98,19 +104,26 @@ function RowMenu() {
         <MoreHorizRoundedIcon />
       </MenuButton>
       <Menu size="sm" sx={{ minWidth: 140 }}>
-        <MenuItem>Edit</MenuItem>
-        <MenuItem>Rename</MenuItem>
-        <MenuItem>Move</MenuItem>
+        <MenuItem>Editar</MenuItem>
+        <MenuItem>Renomear</MenuItem>
+        <MenuItem>Mover</MenuItem>
         <Divider />
-        <MenuItem color="danger">Delete</MenuItem>
+        <MenuItem color="danger">Excluir</MenuItem>
       </Menu>
     </Dropdown>
   );
 }
 
+/**
+ * Componente de lista de pedidos otimizado para visualização em dispositivos móveis
+ * 
+ * Exibe informações resumidas de cada pedido em formato de cartão,
+ * incluindo dados do cliente, status e opções de ação.
+ */
 export default function OrderList() {
   return (
     <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+      {/* Lista de itens de pedido */}
       {listItems.map((listItem) => (
         <List key={listItem.id} size="sm" sx={{ '--ListItem-paddingX': 0 }}>
           <ListItem
@@ -121,6 +134,7 @@ export default function OrderList() {
             }}
           >
             <ListItemContent sx={{ display: 'flex', gap: 2, alignItems: 'start' }}>
+              {/* Avatar e informações do cliente */}
               <ListItemDecorator>
                 <Avatar size="sm">{listItem.customer.initial}</Avatar>
               </ListItemDecorator>
@@ -131,6 +145,8 @@ export default function OrderList() {
                 <Typography level="body-xs" gutterBottom>
                   {listItem.customer.email}
                 </Typography>
+                
+                {/* Data e ID do pedido */}
                 <Box
                   sx={{
                     display: 'flex',
@@ -144,14 +160,18 @@ export default function OrderList() {
                   <Typography level="body-xs">&bull;</Typography>
                   <Typography level="body-xs">{listItem.id}</Typography>
                 </Box>
+                
+                {/* Ações disponíveis */}
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                   <Link level="body-sm" component="button">
-                    Download
+                    Baixar
                   </Link>
                   <RowMenu />
                 </Box>
               </div>
             </ListItemContent>
+            
+            {/* Chip de status */}
             <Chip
               variant="soft"
               size="sm"
@@ -176,12 +196,14 @@ export default function OrderList() {
           <ListDivider />
         </List>
       ))}
+      
+      {/* Controles de paginação */}
       <Box
         className="Pagination-mobile"
         sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'center', py: 2 }}
       >
         <IconButton
-          aria-label="previous page"
+          aria-label="página anterior"
           variant="outlined"
           color="neutral"
           size="sm"
@@ -189,10 +211,10 @@ export default function OrderList() {
           <KeyboardArrowLeftIcon />
         </IconButton>
         <Typography level="body-sm" sx={{ mx: 'auto' }}>
-          Page 1 of 10
+          Página 1 de 10
         </Typography>
         <IconButton
-          aria-label="next page"
+          aria-label="próxima página"
           variant="outlined"
           color="neutral"
           size="sm"

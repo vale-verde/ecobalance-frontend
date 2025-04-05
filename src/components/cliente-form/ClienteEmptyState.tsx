@@ -6,10 +6,19 @@ import Stack from '@mui/joy/Stack';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 
+/**
+ * Props para o componente de estado vazio de cliente
+ */
 type ClienteEmptyStateProps = {
   onCreateClick: () => void;
 };
 
+/**
+ * Componente que exibe um estado vazio quando nenhum cliente está selecionado
+ * 
+ * Apresenta uma mensagem informativa e um botão para criar um novo cliente,
+ * melhorando a experiência do usuário quando não há conteúdo para exibir
+ */
 export default function ClienteEmptyState({ onCreateClick }: ClienteEmptyStateProps) {
   return (
     <Stack

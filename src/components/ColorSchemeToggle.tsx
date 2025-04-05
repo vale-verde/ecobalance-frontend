@@ -5,13 +5,26 @@ import IconButton, { IconButtonProps } from '@mui/joy/IconButton';
 import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
 import LightModeIcon from '@mui/icons-material/LightMode';
 
+/**
+ * Componente de alternância entre temas claro e escuro
+ * 
+ * Utiliza o hook useColorScheme do Material UI Joy para alternar
+ * entre os modos de tema light e dark.
+ */
 export default function ColorSchemeToggle(props: IconButtonProps) {
   const { onClick, sx, ...other } = props;
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
+  
+  /**
+   * Efeito para marcar o componente como montado no cliente
+   * Evita problemas de hidratação com SSR
+   */
   React.useEffect(() => {
     setMounted(true);
   }, []);
+  
+  // Renderiza um botão desabilitado durante o SSR para evitar hidratação incorreta
   if (!mounted) {
     return (
       <IconButton
@@ -24,6 +37,7 @@ export default function ColorSchemeToggle(props: IconButtonProps) {
       />
     );
   }
+  
   return (
     <IconButton
       data-screenshot="toggle-mode"
@@ -40,6 +54,7 @@ export default function ColorSchemeToggle(props: IconButtonProps) {
         onClick?.(event);
       }}
       sx={[
+        // Alterna a visibilidade dos ícones com base no tema atual
         mode === 'dark'
           ? { '& > *:first-child': { display: 'none' } }
           : { '& > *:first-child': { display: 'initial' } },

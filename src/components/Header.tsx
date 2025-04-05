@@ -6,6 +6,12 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 import { toggleSidebar } from '../utils';
 
+/**
+ * Componente de cabeçalho responsivo
+ * 
+ * Exibido apenas em dispositivos móveis e tablets (xs até md),
+ * contém o botão para abrir/fechar a barra lateral.
+ */
 export default function Header() {
   return (
     <Sheet
@@ -25,6 +31,7 @@ export default function Header() {
         boxShadow: 'sm',
       }}
     >
+      {/* Define a altura do cabeçalho responsivamente através de variáveis CSS */}
       <GlobalStyles
         styles={(theme) => ({
           ':root': {
@@ -35,6 +42,8 @@ export default function Header() {
           },
         })}
       />
+      
+      {/* Botão para alternar a visibilidade da barra lateral */}
       <IconButton
         onClick={() => toggleSidebar()}
         variant="outlined"

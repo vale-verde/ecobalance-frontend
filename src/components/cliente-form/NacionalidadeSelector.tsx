@@ -6,6 +6,9 @@ import FormControl, { FormControlProps } from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
 import ListItemDecorator from '@mui/joy/ListItemDecorator';
 
+/**
+ * Interface que define a estrutura de um país
+ */
 export interface CountryType {
   code: string;
   label: string;
@@ -13,6 +16,9 @@ export interface CountryType {
   suggested?: boolean;
 }
 
+/**
+ * Props para o componente seletor de nacionalidade
+ */
 interface NacionalidadeSelectorProps extends Omit<FormControlProps, 'onChange'> {
   value?: CountryType;
   onChange?: (value: CountryType | null) => void;
@@ -20,6 +26,12 @@ interface NacionalidadeSelectorProps extends Omit<FormControlProps, 'onChange'> 
   error?: boolean;
 }
 
+/**
+ * Componente para seleção de nacionalidade com bandeiras dos países
+ * 
+ * Permite a seleção visual de países através de um componente autocomplete
+ * com exibição de bandeiras e nomes dos países
+ */
 export default function NacionalidadeSelector(props: NacionalidadeSelectorProps) {
   const { sx, value, onChange, name, error, ...other } = props;
   
@@ -102,7 +114,9 @@ export default function NacionalidadeSelector(props: NacionalidadeSelectorProps)
   );
 }
 
-// Lista de países com Brasil como primeira opção
+/**
+ * Lista de países com Brasil como primeira opção sugerida
+ */
 const countries: readonly CountryType[] = [
   { code: 'BR', label: 'Brazil', phone: '55', suggested: true },
   { code: 'AD', label: 'Andorra', phone: '376' },

@@ -37,18 +37,27 @@ import ApartmentIcon from '@mui/icons-material/Apartment';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import { Cliente, Documento, Socio } from '../../data/clientes';
 
+/**
+ * Props para o componente de visualização de cliente
+ */
 type ClienteViewProps = {
   cliente: Cliente;
   onEditClick: () => void;
   onCancelClick?: () => void;
 };
 
+/**
+ * Props para o componente de item de informação
+ */
 type InfoItemProps = {
   label: string;
   value?: string | number | null;
   icon?: React.ReactNode;
 };
 
+/**
+ * Componente para exibir um item de informação com ícone e valor
+ */
 function InfoItem({ label, value, icon }: InfoItemProps) {
   if (!value) return null;
   
@@ -104,10 +113,16 @@ function InfoItem({ label, value, icon }: InfoItemProps) {
   );
 }
 
+/**
+ * Props para o componente de item de documento
+ */
 type DocumentoItemProps = {
   documento: Documento;
 };
 
+/**
+ * Componente para exibir um documento na lista de documentos
+ */
 function DocumentoItem({ documento }: DocumentoItemProps) {
   let icon = <InsertDriveFileIcon />;
   
@@ -141,6 +156,12 @@ function DocumentoItem({ documento }: DocumentoItemProps) {
   );
 }
 
+/**
+ * Componente para visualização detalhada dos dados de um cliente
+ * 
+ * Exibe todas as informações do cliente em um layout organizado,
+ * incluindo dados pessoais/empresariais, endereço, documentos e sócios
+ */
 export default function ClienteView({ cliente, onEditClick, onCancelClick }: ClienteViewProps) {
   const isPF = cliente.tipoCliente === 'PF';
   

@@ -18,9 +18,14 @@ import ClienteEmptyState from './cliente-form/ClienteEmptyState';
 import ClienteView from './cliente-form/ClienteView';
 import ClienteForm from './cliente-form/ClienteForm';
 
-// Definir os possíveis modos do formulário
+/**
+ * Modos possíveis para o painel de formulário de cliente
+ */
 type FormMode = 'empty' | 'view' | 'edit' | 'create';
 
+/**
+ * Props para o componente ClienteFormPane
+ */
 type ClienteFormPaneProps = {
   selectedClienteId?: string | null;
   viewMode?: 'view' | 'edit' | null;
@@ -30,6 +35,15 @@ type ClienteFormPaneProps = {
   onCancelView?: () => void;
 };
 
+/**
+ * Componente de painel de formulário para visualização, criação e edição de clientes
+ * 
+ * Responsável por gerenciar todos os estados e operações relacionados a um cliente:
+ * - Visualização de detalhes
+ * - Criação de novos clientes
+ * - Edição de clientes existentes
+ * - Exclusão de clientes
+ */
 export default function ClienteFormPane({
   selectedClienteId,
   viewMode,
@@ -38,17 +52,15 @@ export default function ClienteFormPane({
   onClienteDeleted,
   onCancelView
 }: ClienteFormPaneProps) {
-  // Estado para controlar o modo do formulário
+  // Estados principais
   const [mode, setMode] = React.useState<FormMode>('empty');
-  
-  // Estado para armazenar o cliente atual
   const [currentCliente, setCurrentCliente] = React.useState<Cliente | null>(null);
-  
-  // Estados para controle de UI
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | null>(null);
   
-  // Efeito para responder a alterações no #create-client via URL
+  /**
+   * Efeito para responder a alterações no hash da URL para criação de cliente
+   */
   React.useEffect(() => {
     const handleHashChange = () => {
       if (window.location.hash === '#create-client') {
@@ -60,7 +72,6 @@ export default function ClienteFormPane({
     
     window.addEventListener('hashchange', handleHashChange);
     
-    // Verificar no carregamento inicial também
     if (window.location.hash === '#create-client') {
       setMode('create');
       setCurrentCliente(null);
@@ -72,7 +83,9 @@ export default function ClienteFormPane({
     };
   }, []);
   
-  // Carregar cliente quando o ID mudar ou o viewMode mudar
+  /**
+   * Efeito para carregar dados do cliente quando o ID selecionado muda
+   */
   React.useEffect(() => {
     if (selectedClienteId) {
       setLoading(true);
@@ -82,7 +95,6 @@ export default function ClienteFormPane({
         .then(cliente => {
           if (cliente) {
             setCurrentCliente(cliente);
-            // Definir o modo com base no viewMode recebido das props
             setMode(viewMode === 'edit' ? 'edit' : 'view');
           }
           setLoading(false);
@@ -98,26 +110,25 @@ export default function ClienteFormPane({
     }
   }, [selectedClienteId, viewMode]);
   
-  // Função para criar um novo cliente
+  /**
+   * Funções de manipulação de eventos
+   */
   const handleCreateCliente = () => {
     setMode('create');
     setCurrentCliente(null);
   };
   
-  // Função para visualizar cliente
   const handleViewCliente = (cliente: Cliente) => {
     setCurrentCliente(cliente);
     setMode('view');
   };
   
-  // Função para editar cliente atual
   const handleEditCliente = () => {
     if (currentCliente) {
       setMode('edit');
     }
   };
   
-  // Função para cancelar edição/criação ou visualização
   const handleCancelEdit = () => {
     if (mode === 'view' && onCancelView) {
       onCancelView();
@@ -128,7 +139,9 @@ export default function ClienteFormPane({
     }
   };
   
-  // Função para salvar cliente (criar ou atualizar)
+  /**
+   * Função para salvar cliente (criar ou atualizar)
+   */
   const handleSaveCliente = (cliente: Cliente) => {
     setLoading(true);
     setError(null);
@@ -142,7 +155,6 @@ export default function ClienteFormPane({
         setCurrentCliente(savedCliente);
         setMode('view');
         
-        // Notificar componente pai sobre a atualização
         if (mode === 'create' && onClienteCreated) {
           onClienteCreated(savedCliente);
         } else if (mode === 'edit' && onClienteUpdated) {
@@ -158,7 +170,9 @@ export default function ClienteFormPane({
       });
   };
   
-  // Função para excluir cliente
+  /**
+   * Função para excluir cliente
+   */
   const handleDeleteCliente = () => {
     if (!currentCliente) return;
     
@@ -167,12 +181,10 @@ export default function ClienteFormPane({
       
       deleteCliente(currentCliente.id)
         .then(() => {
-          // Notificar componente pai
           if (onClienteDeleted) {
             onClienteDeleted(currentCliente.id);
           }
           
-          // Resetar formulário
           setCurrentCliente(null);
           setMode('empty');
         })
@@ -186,7 +198,9 @@ export default function ClienteFormPane({
     }
   };
   
-  // Renderizar conteúdo com base no modo
+  /**
+   * Renderiza o conteúdo apropriado com base no modo atual
+   */
   const renderContent = () => {
     if (loading) {
       return (
@@ -249,10 +263,61 @@ export default function ClienteFormPane({
         pb: 0,
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: 'background.level1',
       }}
     >
-      {renderContent()}
+      <Box 
+        sx={{ 
+          display: 'flex', 
+          flexDirection: 'column',
+          flex: 1,
+        }}
+      >
+        {/* Cabeçalho com título e botões de ação */}
+        <Box 
+          sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'space-between',
+            mb: 2
+          }}
+        >
+          <Typography 
+            level="h3"
+            sx={{ 
+              fontSize: { xs: 'xl', md: 'xl2' },
+              fontWeight: 'bold' 
+            }}
+          >
+            {mode === 'view' && currentCliente ? 'Detalhes do Cliente' : 
+             mode === 'edit' && currentCliente ? 'Editar Cliente' : 
+             mode === 'create' ? 'Novo Cliente' : 'Cliente'}
+          </Typography>
+          
+          {mode === 'view' && currentCliente && (
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <Button
+                startDecorator={<EditIcon />}
+                color="primary"
+                variant="soft"
+                onClick={handleEditCliente}
+              >
+                Editar
+              </Button>
+              <Button
+                startDecorator={<DeleteIcon />}
+                color="danger"
+                variant="soft"
+                onClick={handleDeleteCliente}
+              >
+                Excluir
+              </Button>
+            </Box>
+          )}
+        </Box>
+        
+        {/* Conteúdo principal */}
+        {renderContent()}
+      </Box>
     </Sheet>
   );
 } 

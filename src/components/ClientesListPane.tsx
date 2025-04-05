@@ -16,6 +16,9 @@ import { Cliente } from '../data/clientes';
 import { toggleSidebar } from '../utils';
 import CircularProgress from '@mui/joy/CircularProgress';
 
+/**
+ * Props para o componente ClientesListPane
+ */
 type ClientesListPaneProps = {
   clientes: Cliente[];
   loading?: boolean;
@@ -28,6 +31,10 @@ type ClientesListPaneProps = {
   onClienteDelete?: (id: string) => void;
 };
 
+/**
+ * Componente que exibe uma lista paginada de clientes com funcionalidades de
+ * pesquisa, seleção, paginação e ações de CRUD
+ */
 export default function ClientesListPane({
   clientes,
   loading = false,
@@ -39,28 +46,34 @@ export default function ClientesListPane({
   onClienteEdit,
   onClienteDelete
 }: ClientesListPaneProps) {
+  // Estados para controle da pesquisa e paginação
   const [searchValue, setSearchValue] = React.useState('');
   const [page, setPage] = React.useState(1);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-  // Calcular total de páginas e itens a exibir
+  /**
+   * Calcula os dados de paginação e determina quais clientes exibir
+   */
   const totalPages = Math.max(1, Math.ceil(clientes.length / rowsPerPage));
   const startIndex = (page - 1) * rowsPerPage;
   const endIndex = Math.min(startIndex + rowsPerPage, clientes.length);
   const displayedClientes = clientes.slice(startIndex, endIndex);
 
-  // Função para mudar de página
+  /**
+   * Manipuladores de eventos
+   */
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
   };
   
-  // Função para pesquisar
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     onSearch(searchValue);
   };
   
-  // Resetar para página 1 quando a lista de clientes mudar
+  /**
+   * Efeito para resetar a página quando a lista de clientes mudar
+   */
   React.useEffect(() => {
     setPage(1);
   }, [clientes.length]);
@@ -76,6 +89,7 @@ export default function ClientesListPane({
         flexDirection: 'column',
       }}
     >
+      {/* Cabeçalho com título e contador */}
       <Stack
         direction="row"
         spacing={1}
@@ -107,6 +121,8 @@ export default function ClientesListPane({
           <FilterAltIcon />
         </IconButton>
       </Stack>
+
+      {/* Barra de pesquisa e botão de adicionar */}
       <Box sx={{ px: 2, pb: 1.5, display: 'flex', gap: 1 }}>
         <form onSubmit={handleSearch} style={{ flex: 1, display: 'flex' }}>
           <Input
@@ -157,6 +173,8 @@ export default function ClientesListPane({
           <AddIcon />
         </IconButton>
       </Box>
+
+      {/* Lista de clientes com loading state */}
       <Box sx={{ 
           flex: 1,
           overflowY: 'auto',
@@ -196,7 +214,7 @@ export default function ClientesListPane({
         )}
       </Box>
       
-      {/* Fixed Pagination Footer */}
+      {/* Rodapé com controles de paginação */}
       <Box sx={{ 
         p: 2, 
         display: 'flex',
