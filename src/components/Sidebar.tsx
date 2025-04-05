@@ -27,6 +27,10 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Tooltip from '@mui/joy/Tooltip';
 import { Popper } from '@mui/base/Popper';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import FactCheckIcon from '@mui/icons-material/FactCheck';
 
 import ColorSchemeToggle from './ColorSchemeToggle';
 import { closeSidebar } from '../utils';
@@ -479,7 +483,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
             )}
           </ListItem>
 
-          {/* Item Ratificação */}
+          {/* Item Ratificações */}
           <ListItem 
             sx={{
               width: '100%',
@@ -492,31 +496,31 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
           >
             {collapsed ? (
               <Tooltip
-                title="Ratificação"
+                title="Ratificações"
                 placement="right"
                 variant="soft"
                 sx={tooltipStyle}
               >
                 <ListItemButton 
-                  selected={currentPage === 'ratificacao'}
-                  onClick={() => onNavigate && onNavigate('ratificacao')}
+                  selected={currentPage === 'ratificacoes'}
+                  onClick={() => onNavigate && onNavigate('ratificacoes')}
                   sx={buttonWithFullHover}
                 >
-                  <ReceiptRoundedIcon sx={{ fontSize: 22 }} />
+                  <FactCheckIcon sx={{ fontSize: 22 }} />
                 </ListItemButton>
               </Tooltip>
             ) : (
               <ListItemButton 
-                selected={currentPage === 'ratificacao'}
-                onClick={() => onNavigate && onNavigate('ratificacao')}
+                selected={currentPage === 'ratificacoes'}
+                onClick={() => onNavigate && onNavigate('ratificacoes')}
                 sx={{ 
                   width: '100%',
                   mx: 0
                 }}
               >
-                <ReceiptRoundedIcon />
+                <FactCheckIcon />
                 <ListItemContent>
-                  <Typography level="title-sm">Ratificação</Typography>
+                  <Typography level="title-sm">Ratificações</Typography>
                 </ListItemContent>
               </ListItemButton>
             )}
@@ -773,7 +777,12 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                             bgcolor: 'var(--joy-palette-neutral-softHoverBg)',
                           },
                         }}
+                        onClick={() => {
+                          onNavigate?.('perfil');
+                          setUsuariosOpen(false);
+                        }}
                       >
+                        <PersonRoundedIcon sx={{ mr: 1, fontSize: '1.2rem' }} />
                         Meu perfil
                       </Box>
                       <Box
@@ -788,7 +797,12 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                             bgcolor: 'var(--joy-palette-neutral-softHoverBg)',
                           },
                         }}
+                        onClick={() => {
+                          onNavigate?.('novo-usuario');
+                          setUsuariosOpen(false);
+                        }}
                       >
+                        <PersonAddIcon sx={{ mr: 1, fontSize: '1.2rem' }} />
                         Criar novo usuário
                       </Box>
                       <Box
@@ -803,7 +817,12 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                             bgcolor: 'var(--joy-palette-neutral-softHoverBg)',
                           },
                         }}
+                        onClick={() => {
+                          onNavigate?.('usuarios');
+                          setUsuariosOpen(false);
+                        }}
                       >
+                        <PeopleAltIcon sx={{ mr: 1, fontSize: '1.2rem' }} />
                         Usuários do sistema
                       </Box>
                     </Box>
@@ -851,8 +870,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                     }}>
                       <ListItemButton
                         role="menuitem"
-                        component="a"
-                        href="/joy-ui/getting-started/templates/profile-dashboard/"
+                        onClick={() => onNavigate?.('perfil')}
                         sx={{ 
                           width: '100%',
                           mx: 0
@@ -864,20 +882,24 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                     <ListItem sx={{ 
                       px: 0
                     }}>
-                      <ListItemButton sx={{ 
-                        width: '100%',
-                        mx: 0
-                      }}>
+                      <ListItemButton 
+                        onClick={() => onNavigate?.('novo-usuario')}
+                        sx={{ 
+                          width: '100%',
+                          mx: 0
+                        }}>
                         Criar novo usuário
                       </ListItemButton>
                     </ListItem>
                     <ListItem sx={{ 
                       px: 0
                     }}>
-                      <ListItemButton sx={{ 
-                        width: '100%',
-                        mx: 0
-                      }}>
+                      <ListItemButton 
+                        onClick={() => onNavigate?.('usuarios')}
+                        sx={{ 
+                          width: '100%',
+                          mx: 0
+                        }}>
                         Usuários do sistema
                       </ListItemButton>
                     </ListItem>
@@ -960,15 +982,19 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
               >
                 <ListItemButton
                   sx={buttonWithFullHover}
+                  onClick={() => onNavigate?.('configuracoes')}
                 >
                   <SettingsRoundedIcon sx={{ fontSize: 22 }} />
                 </ListItemButton>
               </Tooltip>
             ) : (
-              <ListItemButton sx={{ 
-                width: '100%',
-                mx: 0
-              }}>
+              <ListItemButton 
+                sx={{ 
+                  width: '100%',
+                  mx: 0
+                }}
+                onClick={() => onNavigate?.('configuracoes')}
+              >
                 <SettingsRoundedIcon />
                 Configurações
               </ListItemButton>

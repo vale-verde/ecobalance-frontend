@@ -17,6 +17,11 @@ import OrderList from './components/OrderList';
 import Header from './components/Header';
 import ClientesPage from './pages/ClientesPage';
 import PropriedadesPage from './pages/PropriedadesPage';
+import RatificacoesPage from './pages/RatificacoesPage';
+import PerfilPage from './pages/PerfilPage';
+import NovoUsuarioPage from './pages/NovoUsuarioPage';
+import UsuariosPage from './pages/UsuariosPage';
+import ConfiguracoesPage from './pages/ConfiguracoesPage';
 
 /**
  * Componente principal da aplicação Ecobalance
@@ -26,7 +31,7 @@ import PropriedadesPage from './pages/PropriedadesPage';
  * - Fornecimento do contexto de navegação para componentes filhos
  * - Layout responsivo com barra lateral e conteúdo principal
  */
-export default function JoyOrderDashboardTemplate() {
+export default function EcoBalanceApp() {
   const [currentPage, setCurrentPage] = React.useState<string>('dashboard');
   
   /**
@@ -39,87 +44,19 @@ export default function JoyOrderDashboardTemplate() {
         return <ClientesPage />;
       case 'propriedades':
         return <PropriedadesPage />;
+      case 'ratificacoes':
+        return <RatificacoesPage />;
+      case 'perfil':
+        return <PerfilPage />;
+      case 'novo-usuario':
+        return <NovoUsuarioPage />;
+      case 'usuarios':
+        return <UsuariosPage />;
+      case 'configuracoes':
+        return <ConfiguracoesPage />;
       case 'dashboard':
       default:
-        return (
-          <Box
-            component="main"
-            className="MainContent"
-            sx={{
-              px: { xs: 2, md: 6 },
-              pt: {
-                xs: 'calc(12px + var(--Header-height))',
-                sm: 'calc(12px + var(--Header-height))',
-                md: 3,
-              },
-              pb: { xs: 2, sm: 2, md: 3 },
-              flex: 1,
-              display: 'flex',
-              flexDirection: 'column',
-              minWidth: 0,
-              height: '100dvh',
-              gap: 1,
-            }}
-          >
-            {/* Breadcrumbs para navegação */}
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Breadcrumbs
-                size="sm"
-                aria-label="breadcrumbs"
-                separator={<ChevronRightRoundedIcon fontSize="small" />}
-                sx={{ pl: 0 }}
-              >
-                <Link
-                  underline="none"
-                  color="neutral"
-                  href="#home"
-                  aria-label="Home"
-                >
-                  <HomeRoundedIcon />
-                </Link>
-                <Link
-                  underline="hover"
-                  color="neutral"
-                  href="#dashboard"
-                  sx={{ fontSize: 12, fontWeight: 500 }}
-                >
-                  Dashboard
-                </Link>
-                <Typography color="primary" sx={{ fontWeight: 500, fontSize: 12 }}>
-                  Pedidos
-                </Typography>
-              </Breadcrumbs>
-            </Box>
-            
-            {/* Cabeçalho da página de pedidos */}
-            <Box
-              sx={{
-                display: 'flex',
-                mb: 1,
-                gap: 1,
-                flexDirection: { xs: 'column', sm: 'row' },
-                alignItems: { xs: 'start', sm: 'center' },
-                flexWrap: 'wrap',
-                justifyContent: 'space-between',
-              }}
-            >
-              <Typography level="h2" component="h1">
-                Pedidos
-              </Typography>
-              <Button
-                color="primary"
-                startDecorator={<DownloadRoundedIcon />}
-                size="sm"
-              >
-                Download PDF
-              </Button>
-            </Box>
-            
-            {/* Componentes de visualização de pedidos */}
-            <OrderTable />
-            <OrderList />
-          </Box>
-        );
+        return <DashboardPage />;
     }
   };
 
@@ -145,5 +82,90 @@ export default function JoyOrderDashboardTemplate() {
         </Box>
       </NavigationContext.Provider>
     </CssVarsProvider>
+  );
+}
+
+/**
+ * Página de dashboard principal
+ */
+function DashboardPage() {
+  return (
+    <Box
+      component="main"
+      className="MainContent"
+      sx={{
+        px: { xs: 2, md: 6 },
+        pt: {
+          xs: 'calc(12px + var(--Header-height))',
+          sm: 'calc(12px + var(--Header-height))',
+          md: 3,
+        },
+        pb: { xs: 2, sm: 2, md: 3 },
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        minWidth: 0,
+        height: '100dvh',
+        gap: 1,
+      }}
+    >
+      {/* Breadcrumbs para navegação */}
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <Breadcrumbs
+          size="sm"
+          aria-label="breadcrumbs"
+          separator={<ChevronRightRoundedIcon fontSize="small" />}
+          sx={{ pl: 0 }}
+        >
+          <Link
+            underline="none"
+            color="neutral"
+            href="#home"
+            aria-label="Home"
+          >
+            <HomeRoundedIcon />
+          </Link>
+          <Link
+            underline="hover"
+            color="neutral"
+            href="#dashboard"
+            sx={{ fontSize: 12, fontWeight: 500 }}
+          >
+            Dashboard
+          </Link>
+          <Typography color="primary" sx={{ fontWeight: 500, fontSize: 12 }}>
+            Pedidos
+          </Typography>
+        </Breadcrumbs>
+      </Box>
+      
+      {/* Cabeçalho da página de pedidos */}
+      <Box
+        sx={{
+          display: 'flex',
+          mb: 1,
+          gap: 1,
+          flexDirection: { xs: 'column', sm: 'row' },
+          alignItems: { xs: 'start', sm: 'center' },
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Typography level="h2" component="h1">
+          Pedidos
+        </Typography>
+        <Button
+          color="primary"
+          startDecorator={<DownloadRoundedIcon />}
+          size="sm"
+        >
+          Download PDF
+        </Button>
+      </Box>
+      
+      {/* Componentes de visualização de pedidos */}
+      <OrderTable />
+      <OrderList />
+    </Box>
   );
 }
