@@ -107,6 +107,8 @@ export default function RatificacaoMetricsCards({
                 transition: 'all 0.2s',
                 cursor: 'pointer',
                 ...cardStyle,
+                // Ensure border is never black in light theme
+                borderColor: `var(--joy-palette-${card.color}-200)`,
                 '&:hover': {
                   boxShadow: 'md',
                   transform: 'translateY(-2px)',
@@ -165,9 +167,9 @@ export default function RatificacaoMetricsCards({
                   sx={{ 
                     fontSize: { xs: '1.75rem', md: '2rem' }, 
                     fontWeight: 700,
-                    color: 'white',
+                    color: isSelected ? 'white' : `var(--joy-palette-text-primary)`,
                     lineHeight: 1,
-                    textShadow: isSelected ? 'none' : '0 1px 1px rgba(0,0,0,0.15)',
+                    textShadow: isSelected ? 'none' : '0 1px 1px rgba(0,0,0,0.05)',
                   }}
                 >
                   {card.value}
