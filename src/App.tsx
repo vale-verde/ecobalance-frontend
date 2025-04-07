@@ -69,7 +69,7 @@ export default function EcoBalanceApp() {
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
-      <BrowserRouter>
+      <BrowserRouter basename="/ecobalance-frontend">
         <Routes>
           <Route path="/" element={<MainLayout><HomePage /></MainLayout>} />
           <Route path="/home" element={<MainLayout><HomePage /></MainLayout>} />
