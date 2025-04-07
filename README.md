@@ -129,7 +129,7 @@ ecobalance/
 - npm ou yarn
 
 ### Execução
-Você pode testar acessando o link: <a href="https://vale-verde.github.io/ecobalance-frontend"</a>
+Você pode testar acessando o link: https://vale-verde.github.io/ecobalance-frontend
 
 ### Instalação
 
