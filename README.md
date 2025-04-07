@@ -202,7 +202,7 @@ Este projeto está licenciado sob a [Licença MIT](LICENSE).
 ---
 
 <div align="center">
-  <p>Desenvolvido por <a href="https://v2carbon.com">V2Carbon</a> © 2023</p>
+  <p>Desenvolvido por <a href="https://v2carbon.com">V2Carbon</a> © 2025</p>
   <p>
     <a href="mailto:contato@v2carbon.com">contato@v2carbon.com</a> | 
     <a href="https://v2carbon.com">www.v2carbon.com</a>
