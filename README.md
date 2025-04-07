@@ -128,6 +128,9 @@ ecobalance/
 - Node.js (v14 ou superior)
 - npm ou yarn
 
+### Execução
+Você pode testar acessando o link: <a href="https://vale-verde.github.io/ecobalance-frontend"</a>
+
 ### Instalação
 
 1. Clone o repositório:
