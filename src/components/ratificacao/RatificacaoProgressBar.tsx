@@ -4,42 +4,49 @@ import LinearProgress from '@mui/joy/LinearProgress';
 import Typography from '@mui/joy/Typography';
 import Box from '@mui/joy/Box';
 
-interface RatificacaoProgressBarProps {
-  progress: number;
-  width?: string | number;
+export interface RatificacaoProgressBarProps {
+  progress?: number;
+  value?: number; // Alias para progress para compatibilidade
+  width?: number;
   showLabel?: boolean;
 }
 
 /**
- * Componente para exibir a barra de progresso de ratificação
+ * Barra de progresso para exibir o avanço do processo de ratificação
+ * 
+ * Pode ser customizada com diferentes tamanhos e opção para exibir
+ * ou ocultar o rótulo com o percentual.
  */
-export default function RatificacaoProgressBar({ 
-  progress, 
-  width = '100%',
+export default function RatificacaoProgressBar({
+  progress,
+  value,
+  width = 100,
   showLabel = true
 }: RatificacaoProgressBarProps) {
-  // Determina a cor da barra com base no progresso
-  const getColorForProgress = (value: number): 'danger' | 'warning' | 'primary' | 'success' => {
-    if (value < 25) return 'danger';
-    if (value < 50) return 'warning';
-    if (value < 100) return 'primary';
-    return 'success';
-  };
-  
-  const color = getColorForProgress(progress);
+  // Usar value como fallback se progress não for fornecido
+  const progressValue = progress !== undefined ? progress : (value || 0);
   
   return (
-    <Box sx={{ width, display: 'flex', alignItems: 'center', gap: 1 }}>
+    <Box sx={{ width: width }}>
       <LinearProgress
         determinate
-        variant="solid"
-        color={color}
-        value={progress}
-        sx={{ flex: 1 }}
+        value={progressValue}
+        sx={{
+          [`& .MuiLinearProgress-bar`]: {
+            transition: 'transform 0.3s linear',
+          },
+        }}
       />
       {showLabel && (
-        <Typography level="body-xs" sx={{ flexShrink: 0 }}>
-          {progress}%
+        <Typography
+          level="body-xs"
+          sx={{
+            display: 'block',
+            textAlign: 'center',
+            mt: 0.5,
+          }}
+        >
+          {progressValue}%
         </Typography>
       )}
     </Box>

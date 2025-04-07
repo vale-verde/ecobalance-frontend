@@ -129,7 +129,7 @@ export default function RatificacaoTable({
   onRowsPerPageChange
 }: RatificacaoTableProps) {
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const [selected, setSelected] = React.useState<number[]>([]);
   const [searchValue, setSearchValue] = React.useState(filters.searchTerm || '');
   
   // Alternar ordem quando o campo for clicado
@@ -301,9 +301,11 @@ export default function RatificacaoTable({
                 <Checkbox
                   size="sm"
                   indeterminate={
-                    selected.length > 0 && selected.length !== data.items.length
+                    selected.length > 0 && selected.length < data.items.length
                   }
-                  checked={selected.length === data.items.length}
+                  checked={
+                    data.items.length > 0 && selected.length === data.items.length
+                  }
                   onChange={(event) => {
                     setSelected(
                       event.target.checked ? data.items.map((row) => row.id) : [],
@@ -343,7 +345,7 @@ export default function RatificacaoTable({
                 <Button
                   variant="plain"
                   color="primary"
-                  onClick={() => handleSortClick('propertyName')}
+                  onClick={() => handleSortClick('propriedade')}
                   endDecorator={<ArrowDropDownIcon />}
                   sx={{
                     fontWeight: 'lg',
@@ -352,7 +354,7 @@ export default function RatificacaoTable({
                     '& svg': {
                       transition: '0.2s',
                       transform:
-                        sort.field === 'propertyName' 
+                        sort.field === 'propriedade' 
                           ? (sort.direction === 'desc' ? 'rotate(0deg)' : 'rotate(180deg)')
                           : 'rotate(0deg)',
                     },
@@ -365,7 +367,7 @@ export default function RatificacaoTable({
                 <Button
                   variant="plain"
                   color="primary"
-                  onClick={() => handleSortClick('registration')}
+                  onClick={() => handleSortClick('codigo')}
                   endDecorator={<ArrowDropDownIcon />}
                   sx={{
                     fontWeight: 'lg',
@@ -374,13 +376,13 @@ export default function RatificacaoTable({
                     '& svg': {
                       transition: '0.2s',
                       transform:
-                        sort.field === 'registration' 
+                        sort.field === 'codigo' 
                           ? (sort.direction === 'desc' ? 'rotate(0deg)' : 'rotate(180deg)')
                           : 'rotate(0deg)',
                     },
                   }}
                 >
-                  Matrícula
+                  Registro
                 </Button>
               </th>
               <th style={{ width: 120, padding: '12px 6px' }}>
@@ -409,7 +411,7 @@ export default function RatificacaoTable({
                 <Button
                   variant="plain"
                   color="primary"
-                  onClick={() => handleSortClick('responsible')}
+                  onClick={() => handleSortClick('responsavel')}
                   endDecorator={<ArrowDropDownIcon />}
                   sx={{
                     fontWeight: 'lg',
@@ -418,7 +420,7 @@ export default function RatificacaoTable({
                     '& svg': {
                       transition: '0.2s',
                       transform:
-                        sort.field === 'responsible' 
+                        sort.field === 'responsavel' 
                           ? (sort.direction === 'desc' ? 'rotate(0deg)' : 'rotate(180deg)')
                           : 'rotate(0deg)',
                     },
@@ -476,7 +478,7 @@ export default function RatificacaoTable({
                       onChange={(event) => {
                         setSelected((ids) =>
                           event.target.checked
-                            ? ids.concat(row.id)
+                            ? [...ids, row.id]
                             : ids.filter((itemId) => itemId !== row.id),
                         );
                       }}
@@ -514,9 +516,9 @@ export default function RatificacaoTable({
                   </td>
                   <td>
                     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                      <Avatar size="sm">{row.responsible.initial}</Avatar>
+                      <Avatar size="sm">{row.responsavel.initial}</Avatar>
                       <div>
-                        <Typography level="body-xs">{row.responsible.name}</Typography>
+                        <Typography level="body-xs">{row.responsavel.nome}</Typography>
                       </div>
                     </Box>
                   </td>

@@ -1,298 +1,61 @@
 /**
- * Interface para o modelo de dados de Ratificação
+ * Tipos e dados mock para o sistema de ratificações do EcoBalance
+ */
+
+/**
+ * Interface para os objetos de Ratificação
  */
 export interface Ratificacao {
-  id: string;
-  propertyName: string;
-  ownerName: string;
-  registration: string;
-  status: 'draft' | 'adjustment' | 'review' | 'approved';
-  responsible: {
-    id: string;
-    name: string;
-    initial: string;
-    email: string;
+  id: number;
+  codigo: string;
+  status: RatificacaoStatus;
+  propriedade: {
+    id: number;
+    nome: string;
+    codigo: string;
+    municipio: string;
+    uf: string;
   };
-  progress: number;
-  protocol: boolean;
-  createdAt: string;
-  updatedAt: string;
+  responsavel: {
+    id: number;
+    nome: string;
+    email?: string;
+    initial?: string;
+  };
+  dataAtualizacao: string;
+  dataCriacao: string;
+  tipoProcesso: string;
+  numeroProtocolo?: string;
+  progress?: number; // Progresso da ratificação em percentual
+  propertyName?: string; // Alias para propriedade.nome
+  ownerName?: string; // Nome do proprietário
+  registration?: string; // Alias para matrícula
+  protocol?: string; // Alias para numeroProtocolo
+  updatedAt?: string; // Alias para dataAtualizacao
 }
 
 /**
- * Gera um conjunto de dados de exemplo para ratificações
+ * Status possíveis para uma ratificação
  */
-export const ratificacoesData: Ratificacao[] = [
-  {
-    id: "RAT00001",
-    propertyName: "Fazenda São Francisco",
-    ownerName: "João Silva",
-    registration: "MT-12345",
-    status: "approved",
-    responsible: {
-      id: "USR001",
-      name: "Amanda Oliveira",
-      initial: "A",
-      email: "amanda@example.com"
-    },
-    progress: 100,
-    protocol: true,
-    createdAt: "2023-12-01",
-    updatedAt: "2023-12-15"
-  },
-  {
-    id: "RAT00002",
-    propertyName: "Sítio Boa Esperança",
-    ownerName: "Maria Santos",
-    registration: "SP-54321",
-    status: "draft",
-    responsible: {
-      id: "USR002",
-      name: "Bruno Costa",
-      initial: "B",
-      email: "bruno@example.com"
-    },
-    progress: 30,
-    protocol: false,
-    createdAt: "2023-12-05",
-    updatedAt: "2023-12-05"
-  },
-  {
-    id: "RAT00003",
-    propertyName: "Rancho Dois Irmãos",
-    ownerName: "Pedro Ferreira",
-    registration: "GO-78901",
-    status: "adjustment",
-    responsible: {
-      id: "USR003",
-      name: "Carla Mendes",
-      initial: "C",
-      email: "carla@example.com"
-    },
-    progress: 60,
-    protocol: false,
-    createdAt: "2023-11-20",
-    updatedAt: "2023-12-10"
-  },
-  {
-    id: "RAT00004",
-    propertyName: "Fazenda Três Marias",
-    ownerName: "Antônio Oliveira",
-    registration: "MG-23456",
-    status: "review",
-    responsible: {
-      id: "USR001",
-      name: "Amanda Oliveira",
-      initial: "A",
-      email: "amanda@example.com"
-    },
-    progress: 85,
-    protocol: false,
-    createdAt: "2023-11-15",
-    updatedAt: "2023-12-12"
-  },
-  {
-    id: "RAT00005",
-    propertyName: "Estância Verde",
-    ownerName: "Ricardo Mendes",
-    registration: "PR-67890",
-    status: "approved",
-    responsible: {
-      id: "USR004",
-      name: "Diego Souza",
-      initial: "D",
-      email: "diego@example.com"
-    },
-    progress: 100,
-    protocol: true,
-    createdAt: "2023-10-30",
-    updatedAt: "2023-11-20"
-  },
-  {
-    id: "RAT00006",
-    propertyName: "Sítio Dois Lagos",
-    ownerName: "Juliana Alves",
-    registration: "SC-34567",
-    status: "draft",
-    responsible: {
-      id: "USR002",
-      name: "Bruno Costa",
-      initial: "B",
-      email: "bruno@example.com"
-    },
-    progress: 15,
-    protocol: false,
-    createdAt: "2023-12-10",
-    updatedAt: "2023-12-10"
-  },
-  {
-    id: "RAT00007",
-    propertyName: "Fazenda Rio Claro",
-    ownerName: "Fernando Martins",
-    registration: "MT-89012",
-    status: "adjustment",
-    responsible: {
-      id: "USR003",
-      name: "Carla Mendes",
-      initial: "C",
-      email: "carla@example.com"
-    },
-    progress: 50,
-    protocol: false,
-    createdAt: "2023-11-05",
-    updatedAt: "2023-12-08"
-  },
-  {
-    id: "RAT00008",
-    propertyName: "Rancho Santa Fé",
-    ownerName: "Mariana Costa",
-    registration: "GO-45678",
-    status: "approved",
-    responsible: {
-      id: "USR004",
-      name: "Diego Souza",
-      initial: "D",
-      email: "diego@example.com"
-    },
-    progress: 100,
-    protocol: true,
-    createdAt: "2023-10-15",
-    updatedAt: "2023-11-10"
-  },
-  {
-    id: "RAT00009",
-    propertyName: "Fazenda Novo Horizonte",
-    ownerName: "Carlos Eduardo",
-    registration: "BA-56789",
-    status: "review",
-    responsible: {
-      id: "USR001",
-      name: "Amanda Oliveira",
-      initial: "A",
-      email: "amanda@example.com"
-    },
-    progress: 90,
-    protocol: false,
-    createdAt: "2023-11-12",
-    updatedAt: "2023-12-14"
-  },
-  {
-    id: "RAT00010",
-    propertyName: "Estância Paraíso",
-    ownerName: "Patrícia Lima",
-    registration: "MS-67890",
-    status: "draft",
-    responsible: {
-      id: "USR002",
-      name: "Bruno Costa",
-      initial: "B",
-      email: "bruno@example.com"
-    },
-    progress: 25,
-    protocol: false,
-    createdAt: "2023-12-08",
-    updatedAt: "2023-12-12"
-  },
-  {
-    id: "RAT00011",
-    propertyName: "Fazenda Vale Verde",
-    ownerName: "Roberto Almeida",
-    registration: "MT-98765",
-    status: "approved",
-    responsible: {
-      id: "USR003",
-      name: "Carla Mendes",
-      initial: "C",
-      email: "carla@example.com"
-    },
-    progress: 100,
-    protocol: true,
-    createdAt: "2023-10-10",
-    updatedAt: "2023-11-05"
-  },
-  {
-    id: "RAT00012",
-    propertyName: "Sítio Bela Vista",
-    ownerName: "Luciana Torres",
-    registration: "SP-23456",
-    status: "adjustment",
-    responsible: {
-      id: "USR004",
-      name: "Diego Souza",
-      initial: "D",
-      email: "diego@example.com"
-    },
-    progress: 65,
-    protocol: false,
-    createdAt: "2023-11-22",
-    updatedAt: "2023-12-13"
-  },
-  {
-    id: "RAT00013",
-    propertyName: "Estância Primavera",
-    ownerName: "Gabriel Nogueira",
-    registration: "MG-34567",
-    status: "draft",
-    responsible: {
-      id: "USR001",
-      name: "Amanda Oliveira",
-      initial: "A",
-      email: "amanda@example.com"
-    },
-    progress: 20,
-    protocol: false,
-    createdAt: "2023-12-07",
-    updatedAt: "2023-12-07"
-  },
-  {
-    id: "RAT00014",
-    propertyName: "Fazenda Belo Monte",
-    ownerName: "Renato Pereira",
-    registration: "GO-12345",
-    status: "review",
-    responsible: {
-      id: "USR002",
-      name: "Bruno Costa",
-      initial: "B",
-      email: "bruno@example.com"
-    },
-    progress: 80,
-    protocol: false,
-    createdAt: "2023-11-18",
-    updatedAt: "2023-12-11"
-  },
-  {
-    id: "RAT00015",
-    propertyName: "Rancho Águas Claras",
-    ownerName: "Camila Rodrigues",
-    registration: "PR-23456",
-    status: "approved",
-    responsible: {
-      id: "USR003",
-      name: "Carla Mendes",
-      initial: "C",
-      email: "carla@example.com"
-    },
-    progress: 100,
-    protocol: true,
-    createdAt: "2023-10-20",
-    updatedAt: "2023-11-15"
-  }
-];
+export type RatificacaoStatus = 'rascunho' | 'revisao' | 'ajuste' | 'aprovada' | 'protocolada';
 
 /**
  * Interface para opções de filtro
  */
 export interface RatificacaoFilterOptions {
   searchTerm?: string;
-  status?: 'all' | 'draft' | 'adjustment' | 'review' | 'approved' | 'pending' | 'protocoled';
+  status?: 'all' | RatificacaoStatus;
+  propriedadeId?: number;
+  responsavelId?: number;
+  periodoInicio?: string;
+  periodoFim?: string;
 }
 
 /**
  * Interface para opções de ordenação
  */
 export interface RatificacaoSortOptions {
-  field: keyof Ratificacao | '';
+  field: keyof Ratificacao;
   direction: 'asc' | 'desc';
 }
 
@@ -312,4 +75,142 @@ export interface RatificacaoMetrics {
   pendentes: number;
   aprovadas: number;
   protocoladas: number;
-} 
+}
+
+/**
+ * Dados mock para ratificações
+ */
+export const MOCK_RATIFICACOES: Ratificacao[] = [
+  {
+    id: 1,
+    codigo: 'RAT-2023-001',
+    status: 'protocolada',
+    propriedade: {
+      id: 1,
+      nome: 'Fazenda São João',
+      codigo: 'FSJ001',
+      municipio: 'São Paulo',
+      uf: 'SP'
+    },
+    responsavel: {
+      id: 1,
+      nome: 'João Silva',
+      email: 'joao.silva@example.com',
+      initial: 'J'
+    },
+    dataAtualizacao: '2023-04-15T14:30:00Z',
+    dataCriacao: '2023-04-10T09:15:00Z',
+    tipoProcesso: 'Regularização Ambiental',
+    numeroProtocolo: 'PROT-2023-0123',
+    progress: 100,
+    propertyName: 'Fazenda São João',
+    ownerName: 'João Silva',
+    registration: 'FSJ001',
+    protocol: 'PROT-2023-0123',
+    updatedAt: '15/04/2023'
+  },
+  {
+    id: 2,
+    codigo: 'RAT-2023-002',
+    status: 'aprovada',
+    propriedade: {
+      id: 2,
+      nome: 'Sítio Recanto',
+      codigo: 'SR002',
+      municipio: 'Campinas',
+      uf: 'SP'
+    },
+    responsavel: {
+      id: 2,
+      nome: 'Maria Oliveira',
+      email: 'maria.oliveira@example.com',
+      initial: 'M'
+    },
+    dataAtualizacao: '2023-04-18T11:20:00Z',
+    dataCriacao: '2023-04-12T10:30:00Z',
+    tipoProcesso: 'Compensação Ambiental',
+    progress: 85,
+    propertyName: 'Sítio Recanto',
+    ownerName: 'Maria Oliveira',
+    registration: 'SR002',
+    updatedAt: '18/04/2023'
+  },
+  {
+    id: 3,
+    codigo: 'RAT-2023-003',
+    status: 'revisao',
+    propriedade: {
+      id: 3,
+      nome: 'Rancho Bom Retiro',
+      codigo: 'RBR003',
+      municipio: 'Belo Horizonte',
+      uf: 'MG'
+    },
+    responsavel: {
+      id: 3,
+      nome: 'Carlos Pereira',
+      email: 'carlos.pereira@example.com',
+      initial: 'C'
+    },
+    dataAtualizacao: '2023-04-19T16:45:00Z',
+    dataCriacao: '2023-04-17T14:00:00Z',
+    tipoProcesso: 'Licenciamento Ambiental',
+    progress: 60,
+    propertyName: 'Rancho Bom Retiro',
+    ownerName: 'Carlos Pereira',
+    registration: 'RBR003',
+    updatedAt: '19/04/2023'
+  },
+  {
+    id: 4,
+    codigo: 'RAT-2023-004',
+    status: 'rascunho',
+    propriedade: {
+      id: 1,
+      nome: 'Fazenda São João',
+      codigo: 'FSJ001',
+      municipio: 'São Paulo',
+      uf: 'SP'
+    },
+    responsavel: {
+      id: 4,
+      nome: 'Amanda Rocha',
+      email: 'amanda.rocha@example.com',
+      initial: 'A'
+    },
+    dataAtualizacao: '2023-04-20T09:30:00Z',
+    dataCriacao: '2023-04-20T09:30:00Z',
+    tipoProcesso: 'Recuperação de Áreas Degradadas',
+    progress: 25,
+    propertyName: 'Fazenda São João',
+    ownerName: 'Amanda Rocha',
+    registration: 'FSJ001',
+    updatedAt: '20/04/2023'
+  },
+  {
+    id: 5,
+    codigo: 'RAT-2023-005',
+    status: 'ajuste',
+    propriedade: {
+      id: 4,
+      nome: 'Chácara Vista Alegre',
+      codigo: 'CVA004',
+      municipio: 'Ribeirão Preto',
+      uf: 'SP'
+    },
+    responsavel: {
+      id: 5,
+      nome: 'Roberto Almeida',
+      email: 'roberto.almeida@example.com',
+      initial: 'R'
+    },
+    dataAtualizacao: '2023-04-21T15:20:00Z',
+    dataCriacao: '2023-04-16T11:45:00Z',
+    tipoProcesso: 'Certificação Ambiental',
+    progress: 40,
+    propertyName: 'Chácara Vista Alegre',
+    ownerName: 'Roberto Almeida',
+    registration: 'CVA004',
+    updatedAt: '21/04/2023'
+  }
+]; 

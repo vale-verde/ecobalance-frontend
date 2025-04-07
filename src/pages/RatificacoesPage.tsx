@@ -7,6 +7,7 @@ import Link from '@mui/joy/Link';
 import AddIcon from '@mui/icons-material/Add';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
+import { useNavigate } from 'react-router-dom';
 
 import RatificacaoTable from '../components/ratificacao/RatificacaoTable';
 import RatificacaoList from '../components/ratificacao/RatificacaoList';
@@ -30,6 +31,8 @@ import {
  * e em formato de lista de cards para dispositivos móveis
  */
 export default function RatificacoesPage() {
+  const navigate = useNavigate();
+  
   // Estado para armazenar os dados das ratificações
   const [data, setData] = React.useState<{
     items: Ratificacao[];
@@ -55,7 +58,7 @@ export default function RatificacoesPage() {
   
   // Estados para controle de filtros, ordenação e paginação
   const [filters, setFilters] = React.useState<RatificacaoFilterOptions>({ status: 'all' });
-  const [sort, setSort] = React.useState<RatificacaoSortOptions>({ field: 'updatedAt', direction: 'desc' });
+  const [sort, setSort] = React.useState<RatificacaoSortOptions>({ field: 'dataAtualizacao', direction: 'desc' });
   const [pagination, setPagination] = React.useState<RatificacaoPaginationOptions>({ page: 1, itemsPerPage: 10 });
   
   // Estados para controle da interface
@@ -119,10 +122,10 @@ export default function RatificacoesPage() {
   };
   
   /**
-   * Adicionar nova ratificação (redirecionaria para formulário de criação)
+   * Navegar para a página de criação de nova ratificação
    */
   const handleCreateRatificacao = () => {
-    alert("Funcionalidade de criação de ratificação ainda não implementada");
+    navigate('/nova-ratificacao');
   };
 
   return (
@@ -156,7 +159,7 @@ export default function RatificacoesPage() {
           <Link
             underline="none"
             color="neutral"
-            href="#home"
+            href="/"
             aria-label="Home"
           >
             <HomeRoundedIcon />

@@ -5,8 +5,10 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import PendingIcon from '@mui/icons-material/Pending';
 import RateReviewIcon from '@mui/icons-material/RateReview';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import VerifiedIcon from '@mui/icons-material/Verified';
 
-type RatificacaoStatus = 'draft' | 'adjustment' | 'review' | 'approved';
+// Import the RatificacaoStatus type from our data model
+import { RatificacaoStatus } from '../../data/ratificacoes';
 
 interface RatificacaoStatusBadgeProps {
   status: RatificacaoStatus;
@@ -22,25 +24,30 @@ export default function RatificacaoStatusBadge({ status, size = 'sm' }: Ratifica
     RatificacaoStatus, 
     { label: string; color: ColorPaletteProp; icon: React.ReactNode }
   > = {
-    draft: {
+    rascunho: {
       label: 'Rascunho',
       color: 'neutral',
       icon: <EditNoteIcon />
     },
-    adjustment: {
+    ajuste: {
       label: 'Ajuste',
       color: 'warning',
       icon: <PendingIcon />
     },
-    review: {
+    revisao: {
       label: 'Revisão',
       color: 'primary',
       icon: <RateReviewIcon />
     },
-    approved: {
+    aprovada: {
       label: 'Aprovada',
       color: 'success',
       icon: <CheckCircleIcon />
+    },
+    protocolada: {
+      label: 'Protocolada',
+      color: 'success',
+      icon: <VerifiedIcon />
     }
   };
   

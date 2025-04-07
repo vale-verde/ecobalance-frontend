@@ -265,13 +265,13 @@ export default function RatificacaoList({
               }}>
                 {/* Avatar e informações do proprietário */}
                 <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
-                  <Avatar size="sm">{item.responsible.initial}</Avatar>
+                  <Avatar size="sm">{item.responsavel.initial}</Avatar>
                   <Box>
                     <Typography level="body-sm" sx={{ fontWeight: 'md' }}>
-                      {item.responsible.name}
+                      {item.responsavel.nome}
                     </Typography>
                     <Typography level="body-xs" sx={{ color: 'text.tertiary' }}>
-                      {item.responsible.email}
+                      {item.responsavel.email}
                     </Typography>
                   </Box>
                 </Box>

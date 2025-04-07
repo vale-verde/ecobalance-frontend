@@ -11,8 +11,9 @@ import ListItemButton, { listItemButtonClasses } from '@mui/joy/ListItemButton';
 import ListItemContent from '@mui/joy/ListItemContent';
 import Typography from '@mui/joy/Typography';
 import Sheet from '@mui/joy/Sheet';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
-import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ReceiptRoundedIcon from '@mui/icons-material/ReceiptRounded';
 import GroupRoundedIcon from '@mui/icons-material/GroupRounded';
 import SupportRoundedIcon from '@mui/icons-material/SupportRounded';
@@ -87,6 +88,9 @@ type SidebarProps = {
  * - Navegação aninhada com menus dropdown
  */
 export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: SidebarProps) {
+  const location = useLocation();
+  const activePath = location.pathname.substring(1) || 'dashboard';
+  
   // Estados principais
   const [collapsed, setCollapsed] = React.useState(false);
   const [showToggleButton, setShowToggleButton] = React.useState(false);
@@ -453,31 +457,33 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
           >
             {collapsed ? (
               <Tooltip
-                title="Dashboard"
+                title="Início"
                 placement="right"
                 variant="soft"
                 sx={tooltipStyle}
               >
                 <ListItemButton 
-                  selected={currentPage === 'dashboard'}
-                  onClick={() => onNavigate && onNavigate('dashboard')}
+                  selected={activePath === 'home'}
+                  component={RouterLink}
+                  to="/home"
                   sx={buttonWithFullHover}
                 >
-                  <DashboardRoundedIcon sx={{ fontSize: 22 }} />
+                  <HomeRoundedIcon sx={{ fontSize: 22 }} />
                 </ListItemButton>
               </Tooltip>
             ) : (
               <ListItemButton 
-                selected={currentPage === 'dashboard'}
-                onClick={() => onNavigate && onNavigate('dashboard')}
+                selected={activePath === 'home'}
+                component={RouterLink}
+                to="/home"
                 sx={{ 
                   width: '100%',
                   mx: 0
                 }}
               >
-                <DashboardRoundedIcon />
+                <HomeRoundedIcon />
                 <ListItemContent>
-                  <Typography level="title-sm">Dashboard</Typography>
+                  <Typography level="title-sm">Início</Typography>
                 </ListItemContent>
               </ListItemButton>
             )}
@@ -502,8 +508,9 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                 sx={tooltipStyle}
               >
                 <ListItemButton 
-                  selected={currentPage === 'ratificacoes'}
-                  onClick={() => onNavigate && onNavigate('ratificacoes')}
+                  selected={activePath === 'ratificacoes'}
+                  component={RouterLink}
+                  to="/ratificacoes"
                   sx={buttonWithFullHover}
                 >
                   <FactCheckIcon sx={{ fontSize: 22 }} />
@@ -511,8 +518,9 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
               </Tooltip>
             ) : (
               <ListItemButton 
-                selected={currentPage === 'ratificacoes'}
-                onClick={() => onNavigate && onNavigate('ratificacoes')}
+                selected={activePath === 'ratificacoes'}
+                component={RouterLink}
+                to="/ratificacoes"
                 sx={{ 
                   width: '100%',
                   mx: 0
@@ -594,7 +602,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                           cursor: 'pointer',
                           display: 'block',
                           fontSize: '0.875rem',
-                          ...(currentPage === 'clientes' && {
+                          ...(activePath === 'clientes' && {
                             bgcolor: 'var(--joy-palette-primary-softBg)',
                             color: 'var(--joy-palette-primary-softColor)',
                           }),
@@ -614,7 +622,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                           cursor: 'pointer',
                           display: 'block',
                           fontSize: '0.875rem',
-                          ...(currentPage === 'propriedades' && {
+                          ...(activePath === 'propriedades' && {
                             bgcolor: 'var(--joy-palette-primary-softBg)',
                             color: 'var(--joy-palette-primary-softColor)',
                           }),
@@ -631,7 +639,7 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
               </Box>
             ) : (
               <Toggler
-                defaultExpanded={currentPage === 'clientes' || currentPage === 'propriedades'}
+                defaultExpanded={activePath === 'clientes' || activePath === 'propriedades'}
                 renderToggle={({ open, setOpen }) => (
                   <ListItemButton 
                     onClick={() => setOpen(!open)}
@@ -670,14 +678,14 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                       px: 0
                     }}>
                       <ListItemButton
-                        selected={currentPage === 'clientes'}
-                        onClick={() => onNavigate && onNavigate('clientes')}
+                        selected={activePath === 'clientes'}
+                        component={RouterLink}
+                        to="/clientes"
                         sx={{ 
                           width: '100%',
                           mx: 0
                         }}
                       >
-                        <PersonRoundedIcon />
                         <ListItemContent>
                           <Typography level="title-sm">Clientes</Typography>
                         </ListItemContent>
@@ -687,14 +695,14 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                       px: 0
                     }}>
                       <ListItemButton
-                        selected={currentPage === 'propriedades'}
-                        onClick={() => onNavigate && onNavigate('propriedades')}
+                        selected={activePath === 'propriedades'}
+                        component={RouterLink}
+                        to="/propriedades"
                         sx={{ 
                           width: '100%',
                           mx: 0
                         }}
                       >
-                        <HomeWorkRoundedIcon />
                         <ListItemContent>
                           <Typography level="title-sm">Propriedades</Typography>
                         </ListItemContent>
@@ -766,6 +774,8 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                     <Divider />
                     <Box sx={{ width: '100%' }}>
                       <Box
+                        component={RouterLink}
+                        to="/perfil"
                         sx={{
                           py: 0.5,
                           px: 1.5,
@@ -773,19 +783,21 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                           cursor: 'pointer',
                           display: 'block',
                           fontSize: '0.875rem',
+                          textDecoration: 'none',
+                          color: 'inherit',
                           '&:hover': {
                             bgcolor: 'var(--joy-palette-neutral-softHoverBg)',
                           },
                         }}
                         onClick={() => {
-                          onNavigate?.('perfil');
                           setUsuariosOpen(false);
                         }}
                       >
-                        <PersonRoundedIcon sx={{ mr: 1, fontSize: '1.2rem' }} />
                         Meu perfil
                       </Box>
                       <Box
+                        component={RouterLink}
+                        to="/novo-usuario"
                         sx={{
                           py: 0.5,
                           px: 1.5,
@@ -793,19 +805,21 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                           cursor: 'pointer',
                           display: 'block',
                           fontSize: '0.875rem',
+                          textDecoration: 'none',
+                          color: 'inherit',
                           '&:hover': {
                             bgcolor: 'var(--joy-palette-neutral-softHoverBg)',
                           },
                         }}
                         onClick={() => {
-                          onNavigate?.('novo-usuario');
                           setUsuariosOpen(false);
                         }}
                       >
-                        <PersonAddIcon sx={{ mr: 1, fontSize: '1.2rem' }} />
                         Criar novo usuário
                       </Box>
                       <Box
+                        component={RouterLink}
+                        to="/usuarios"
                         sx={{
                           py: 0.5,
                           px: 1.5,
@@ -813,16 +827,16 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                           cursor: 'pointer',
                           display: 'block',
                           fontSize: '0.875rem',
+                          textDecoration: 'none',
+                          color: 'inherit',
                           '&:hover': {
                             bgcolor: 'var(--joy-palette-neutral-softHoverBg)',
                           },
                         }}
                         onClick={() => {
-                          onNavigate?.('usuarios');
                           setUsuariosOpen(false);
                         }}
                       >
-                        <PeopleAltIcon sx={{ mr: 1, fontSize: '1.2rem' }} />
                         Usuários do sistema
                       </Box>
                     </Box>
@@ -870,7 +884,9 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                     }}>
                       <ListItemButton
                         role="menuitem"
-                        onClick={() => onNavigate?.('perfil')}
+                        component={RouterLink}
+                        to="/perfil"
+                        selected={activePath === 'perfil'}
                         sx={{ 
                           width: '100%',
                           mx: 0
@@ -883,11 +899,14 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                       px: 0
                     }}>
                       <ListItemButton 
-                        onClick={() => onNavigate?.('novo-usuario')}
+                        component={RouterLink}
+                        to="/novo-usuario"
+                        selected={activePath === 'novo-usuario'}
                         sx={{ 
                           width: '100%',
                           mx: 0
-                        }}>
+                        }}
+                      >
                         Criar novo usuário
                       </ListItemButton>
                     </ListItem>
@@ -895,11 +914,14 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                       px: 0
                     }}>
                       <ListItemButton 
-                        onClick={() => onNavigate?.('usuarios')}
+                        component={RouterLink}
+                        to="/usuarios"
+                        selected={activePath === 'usuarios'}
                         sx={{ 
                           width: '100%',
                           mx: 0
-                        }}>
+                        }}
+                      >
                         Usuários do sistema
                       </ListItemButton>
                     </ListItem>
@@ -949,6 +971,9 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
               >
                 <ListItemButton
                   sx={buttonWithFullHover}
+                  component={RouterLink}
+                  to="/suporte"
+                  selected={activePath === 'suporte'}
                 >
                   <SupportRoundedIcon sx={{ fontSize: 22 }} />
                 </ListItemButton>
@@ -957,7 +982,11 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
               <ListItemButton sx={{ 
                 width: '100%',
                 mx: 0
-              }}>
+              }}
+              component={RouterLink}
+              to="/suporte"
+              selected={activePath === 'suporte'}
+              >
                 <SupportRoundedIcon />
                 Suporte
               </ListItemButton>
@@ -982,7 +1011,9 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
               >
                 <ListItemButton
                   sx={buttonWithFullHover}
-                  onClick={() => onNavigate?.('configuracoes')}
+                  component={RouterLink}
+                  to="/configuracoes"
+                  selected={activePath === 'configuracoes'}
                 >
                   <SettingsRoundedIcon sx={{ fontSize: 22 }} />
                 </ListItemButton>
@@ -993,7 +1024,9 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
                   width: '100%',
                   mx: 0
                 }}
-                onClick={() => onNavigate?.('configuracoes')}
+                component={RouterLink}
+                to="/configuracoes"
+                selected={activePath === 'configuracoes'}
               >
                 <SettingsRoundedIcon />
                 Configurações
@@ -1017,11 +1050,11 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
             <Avatar
               variant="outlined"
               size="sm"
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
+              src="https://lh3.googleusercontent.com/a/ACg8ocIvQHS-a-PBDviMxWNSq1adyPKhq-eOFexRxggfZFpoYuOGEG1D=s288-c-no"
             />
             <Box sx={{ minWidth: 0, flex: 1, ml: 1 }}>
-              <Typography level="title-sm">Siriwat K.</Typography>
-              <Typography level="body-xs">siriwatk@test.com</Typography>
+              <Typography level="title-sm">John Silverio</Typography>
+              <Typography level="body-xs">john@v2carbon.com</Typography>
             </Box>
           </>
         )}
