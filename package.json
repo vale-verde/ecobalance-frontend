@@ -1,4 +1,7 @@
 {
+  "name": "ecobalance",
+  "version": "0.1.0",
+  "homepage": "https://github.com/vale-verde/ecobalance-frontend",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
@@ -15,10 +18,13 @@
   "description": "https://github.com/mui/material-ui/blob/v7.0.1/docs/data/joy/templates/order-dashboard/App.tsx",
   "devDependencies": {
     "eslint-plugin-jsx-a11y": "^6.10.2",
+    "gh-pages": "^6.3.0",
     "react-scripts": "latest"
   },
   "main": "index.tsx",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "react-scripts build",
     "eject": "react-scripts eject",
     "start": "react-scripts start",
