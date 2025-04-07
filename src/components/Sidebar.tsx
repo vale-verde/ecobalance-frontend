@@ -92,7 +92,11 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
   const activePath = location.pathname.substring(1) || 'dashboard';
   
   // Estados principais
-  const [collapsed, setCollapsed] = React.useState(false);
+  const [collapsed, setCollapsed] = React.useState(() => {
+    // Recupera o estado da sidebar do localStorage
+    const savedState = localStorage.getItem('sidebarCollapsed');
+    return savedState ? JSON.parse(savedState) : false;
+  });
   const [showToggleButton, setShowToggleButton] = React.useState(false);
   const searchInputRef = React.useRef<HTMLInputElement>(null);
   
@@ -112,7 +116,10 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
    * Alterna o estado recolhido da barra lateral
    */
   const toggleCollapse = () => {
-    setCollapsed(!collapsed);
+    const newCollapsedState = !collapsed;
+    setCollapsed(newCollapsedState);
+    // Salva o estado no localStorage
+    localStorage.setItem('sidebarCollapsed', JSON.stringify(newCollapsedState));
   };
 
   /**
@@ -121,6 +128,8 @@ export default function Sidebar({ onNavigate, currentPage = 'dashboard' }: Sideb
   const handleSearchClick = () => {
     if (collapsed) {
       setCollapsed(false);
+      // Atualiza o localStorage quando a sidebar é expandida pelo ícone de pesquisa
+      localStorage.setItem('sidebarCollapsed', 'false');
       setTimeout(() => {
         searchInputRef.current?.focus();
       }, 300);

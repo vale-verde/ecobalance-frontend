@@ -237,7 +237,7 @@ export default function NovaRatificacaoPage() {
     const canProceed = isStepComplete(activeStep);
     
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Stack direction="row" spacing={1}>
           <Button
             variant="outlined"
@@ -385,7 +385,6 @@ export default function NovaRatificacaoPage() {
             flexDirection: 'row', 
             alignItems: 'center', 
             gap: 2,
-            bgcolor: 'background.level1',
             borderRadius: 'sm',
             py: 1,
             px: 2,
@@ -449,8 +448,7 @@ export default function NovaRatificacaoPage() {
         variant="outlined"
         sx={{ 
           borderRadius: 'sm',
-          p: 2,
-          mt: 2
+          p: 2
         }}
       >
         {renderActionButtons()}
